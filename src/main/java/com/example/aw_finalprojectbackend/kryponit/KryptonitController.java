@@ -62,6 +62,7 @@ public class KryptonitController {
         benutzerRepository.save(eingeloggterBenutzer);
     }
 
+
     // TODO : @PutMapping("/kryptonit/{kryptonitId}")
 /*    public Kryptonit aktualisiereKryptonitWert(@PathVariable Long id, @RequestParam int neuerKryptonitWert, @ModelAttribute("eingeloggterBenutzer") Optional<Benutzer> eingeloggterBenutzerOptional) {
         Benutzer eingeloggterBenutzer = eingeloggterBenutzerOptional
