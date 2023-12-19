@@ -13,7 +13,6 @@ public class Kryptonit {
 
     private int haeufigkeit;
 
-
     public void setKryptonitId(Long kryptonitId) {
         this.kryptonitId = kryptonitId;
     }
