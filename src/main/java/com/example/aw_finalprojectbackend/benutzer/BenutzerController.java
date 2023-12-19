@@ -11,7 +11,7 @@ import java.util.Optional;
 
 @RestController
 public class BenutzerController {
-    private BenutzerRepository benutzerRepository;
+    private final BenutzerRepository benutzerRepository;
 
     @Autowired
     public BenutzerController(BenutzerRepository benutzerRepository) {
@@ -20,18 +20,18 @@ public class BenutzerController {
 
     @PostMapping("/register")
     public RegisterResponseDTO createUser(@RequestBody RegisterRequestDTO registerRequestDTO){
-        Optional<User> duplicateOptional = userRepository.findByUsername(registerRequestDTO.getUsername());
+        Optional<Benutzer> duplicateOptional = benutzerRepository.findByBenutzerName(registerRequestDTO.benutzerName());
 
         if(duplicateOptional.isPresent()){
-            throw new ResponseStatusException(HttpStatus.CONFLICT, "Username is already taken!");
+            throw new ResponseStatusException(HttpStatus.CONFLICT, "Benutzername ist bereits vergeben!");
         }
         else {
-            if (registerRequestDTO.getPassword1().equals(registerRequestDTO.getPassword2())){
-                User createUser = new User(registerRequestDTO.getUsername(),registerRequestDTO.getPassword1());
-                userRepository.save(createUser);
-                return new RegisterResponseDTO(registerRequestDTO.getUsername());
+            if (registerRequestDTO.passwort1().equals(registerRequestDTO.passwort2())){
+                Benutzer erstelleBenutzer = new Benutzer(registerRequestDTO.benutzerName(),registerRequestDTO.passwort1(), registerRequestDTO.vorname(),registerRequestDTO.nachname(), registerRequestDTO.alter(), registerRequestDTO.geschlecht());
+                benutzerRepository.save(erstelleBenutzer);
+                return new RegisterResponseDTO(registerRequestDTO.benutzerName());
             }
-            else throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Passwords are not the same!");
+            else throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Passwörter stimmen nicht überein.");
         }
     }
 }

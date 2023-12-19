@@ -28,4 +28,13 @@ public class Benutzer {
 
     public Benutzer() {
     }
+
+    public Benutzer(String benutzerName, String passwort, String vorname, String nachname, int alter, String geschlecht) {
+        this.benutzerName = benutzerName;
+        this.passwort = passwort;
+        this.vorname = vorname;
+        this.nachname = nachname;
+        this.alter = alter;
+        this.geschlecht = geschlecht;
+    }
 }
