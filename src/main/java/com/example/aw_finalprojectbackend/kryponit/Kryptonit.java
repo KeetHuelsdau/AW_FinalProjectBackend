@@ -1,8 +1,7 @@
 package com.example.aw_finalprojectbackend.kryponit;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
+import com.example.aw_finalprojectbackend.benutzer.Benutzer;
+import jakarta.persistence.*;
 
 @Entity
 public class Kryptonit {
@@ -10,9 +9,17 @@ public class Kryptonit {
     @GeneratedValue
     private Long kryptonitId;
     private String bezeichnung;
-
     private int haeufigkeit;
 
+    @ManyToOne
+    @JoinColumn(name = "benutzer_id")
+    private Benutzer benutzer;
+
+    public Kryptonit() {
+    }
+    public Kryptonit(Benutzer benutzer) {
+        this.benutzer = benutzer;
+    }
     public void setKryptonitId(Long kryptonitId) {
         this.kryptonitId = kryptonitId;
     }
@@ -35,5 +42,13 @@ public class Kryptonit {
 
     public void setHaeufigkeit(int haeufigkeit) {
         this.haeufigkeit = haeufigkeit;
+    }
+
+    public Benutzer getBenutzer() {
+        return benutzer;
+    }
+
+    public void setBenutzer(Benutzer benutzer) {
+        this.benutzer = benutzer;
     }
 }
