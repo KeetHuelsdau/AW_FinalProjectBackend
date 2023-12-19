@@ -9,7 +9,6 @@ public class Kryptonit {
     @Id
     @GeneratedValue
     private Long kryptonitId;
-
     private String bezeichnung;
 
     private int haeufigkeit;
