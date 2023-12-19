@@ -7,9 +7,10 @@ import jakarta.persistence.Id;
 import jakarta.validation.constraints.Size;
 
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 @Entity
-public class StimmungEntity {
+public class Stimmung {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long stimmungId;
@@ -21,14 +22,14 @@ public class StimmungEntity {
     @Size(min = 5,max = 255)
     private String kommentar;
 
-    public StimmungEntity(Long id, int rating, LocalDateTime erstellungszeit, String kommentar) {
+    public Stimmung(Long id, int rating, LocalDateTime erstellungszeit, String kommentar) {
         this.stimmungId = id;
         this.rating = rating;
         this.erstellungszeit = erstellungszeit;
         this.kommentar = kommentar;
     }
 
-    public StimmungEntity() {
+    public Stimmung() {
     }
 
     public Long getStimmungId() {
@@ -47,8 +48,9 @@ public class StimmungEntity {
         this.rating = rating;
     }
 
-    public LocalDateTime getErstellungszeit() {
-        return erstellungszeit;
+    public String getErstellungszeit() {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyy HH:mm");
+        return erstellungszeit.format(formatter);
     }
 
     public void setErstellungszeit(LocalDateTime erstellungszeit) {
