@@ -27,7 +27,7 @@ public class Benutzer {
 
     @OneToMany(mappedBy = "benutzer", cascade = CascadeType.ALL)
     List<Stimmung> stimmungen;
-    @OneToMany(mappedBy = "benutzer", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "benutzer", cascade = CascadeType.ALL, orphanRemoval = true)
     List <Kryptonit> kryptonite;
 
     public Benutzer() {
