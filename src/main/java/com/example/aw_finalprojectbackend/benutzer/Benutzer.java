@@ -39,4 +39,12 @@ public class Benutzer {
         this.nachname = nachname;
         this.geschlecht = geschlecht;
     }
+
+    public List<Kryptonit> getKryptonite() {
+        return kryptonite;
+    }
+
+    public void setKryptonite(List<Kryptonit> kryptonite) {
+        this.kryptonite = kryptonite;
+    }
 }

@@ -25,26 +25,26 @@ public class KryptonitController {
         Benutzer eingeloggterBenutzer = eingeloggterBenutzerOptional
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Login erforderlich"));
 
-        List<Kryptonit> kryptoniten = eingeloggterBenutzer.getKryptonite();
+        List<Kryptonit> kryptonite = eingeloggterBenutzer.getKryptonite();
 
-        return kryptoniten;
+        return kryptonite;
     }
 
     @PostMapping("/kryptonit")
-    public void erstelleKryptonit(@RequestBody Kryptonit kryptonit, @ModelAttribute("eingeloggterBenutzer") Optional<Benutzer> eingeloggterBenutzerOptional) {
+    public Kryptonit erstelleKryptonit(@RequestBody KryptonitRequestDTO kryptonitRequestDTO, @ModelAttribute("eingeloggterBenutzer") Optional<Benutzer> eingeloggterBenutzerOptional) {
         Benutzer eingeloggterBenutzer = eingeloggterBenutzerOptional
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Login erforderlich"));
+        Kryptonit neuesKryptonit = new Kryptonit(kryptonitRequestDTO.bezeichnung(),eingeloggterBenutzer);
 
-        kryptonit.setBenutzer(eingeloggterBenutzer); //Das Kryptonit dem Benutzer zuweisen
         List<Kryptonit> kryptoniteDesBenutzers = eingeloggterBenutzer.getKryptonite();
-        kryptoniteDesBenutzers.add(kryptonit); //Dem Benutzer das neue Kryponit hinzufuegen
-
-        eingeloggterBenutzer.setKryptonite(kryptoniteDesBenutzers); //Aktualisierte Kryptonitliste dem Benutzer setzen
+        kryptoniteDesBenutzers.add(neuesKryptonit); //Dem Benutzer das neue Kryponit hinzufuegen
 
         benutzerRepository.save(eingeloggterBenutzer); //Den Benutzer speichern, um das neue Kryptonit hinzuzuspeichern
+
+        return neuesKryptonit;
     }
 
-    @DeleteMapping("/kryptonit/{kryptonitId}")
+/*    @DeleteMapping("/kryptonit/{kryptonitId}")
     public void loescheKryptonit(@PathVariable Long kryptonitId, @ModelAttribute("eingeloggterBenutzer") Optional<Benutzer> eingeloggterBenutzerOptional) {
         Benutzer eingeloggterBenutzer = eingeloggterBenutzerOptional
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Login erforderlich"));
@@ -60,7 +60,7 @@ public class KryptonitController {
 
         //den akutalisierten Benutzer speichen, um die Änderungen zu persisitieren
         benutzerRepository.save(eingeloggterBenutzer);
-    }
+    }*/
 
 
     // TODO : @PutMapping("/kryptonit/{kryptonitId}")

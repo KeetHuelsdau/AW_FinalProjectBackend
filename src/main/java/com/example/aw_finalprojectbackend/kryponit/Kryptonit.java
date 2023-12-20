@@ -1,6 +1,7 @@
 package com.example.aw_finalprojectbackend.kryponit;
 
 import com.example.aw_finalprojectbackend.benutzer.Benutzer;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import com.example.aw_finalprojectbackend.benutzer.Benutzer;
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -20,6 +21,15 @@ public class Kryptonit {
     @ManyToOne
     @JsonIgnore
     private Benutzer benutzer;
+
+    public Kryptonit() {
+    }
+
+    public Kryptonit(String bezeichnung, Benutzer benutzer) {
+        this.bezeichnung = bezeichnung;
+        this.haeufigkeit = 0;
+        this.benutzer = benutzer;
+    }
 
     public void setKryptonitId(Long kryptonitId) {
         this.kryptonitId = kryptonitId;
