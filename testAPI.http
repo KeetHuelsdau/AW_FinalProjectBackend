@@ -1,0 +1,23 @@
+//-------------------------------------------------UserEndpoints---------------------------------------------------
+
+### Login user
+POST http://localhost:8080/einloggen
+Content-Type:application/json
+
+{
+  "benutzerName": "moritzrose",
+  "passwort": "moritzrose"
+}
+
+### Logout user
+POST http://localhost:8080/ausloggen
+Content-Type:application/json
+
+### Register user
+POST http://localhost:8080/register
+Content-Type:application/json
+
+{
+  "benutzerName":"tillhueser" ,  "passwort1":"tillhueser" ,  "passwort2":"tillhueser" ,  "vorname":"Till" ,  "nachname":"Hüser" ,  "geschlecht":"männlich"
+}
+
