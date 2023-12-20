@@ -7,17 +7,17 @@ import java.util.List;
 @Service
 public class StimmungService {
 
-    public List<StimmungEntity> getStimmungen(Long userId) {
+    public List<Stimmung> getStimmungen(Long userId) {
 
         return null;
     }
 
-    public StimmungEntity createStimmung(StimmungDTO stimmungDTO) {
+    public Stimmung createStimmung(StimmungDTO stimmungDTO) {
 
         return null;
     }
 
-    public StimmungEntity editStimmung(Long stimmungsId, StimmungDTO stimmungDTO) {
+    public Stimmung editStimmung(Long stimmungsId, StimmungDTO stimmungDTO) {
 
         return null;
     }
