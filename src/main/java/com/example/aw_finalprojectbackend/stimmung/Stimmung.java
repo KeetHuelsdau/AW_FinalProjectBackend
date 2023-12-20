@@ -1,9 +1,8 @@
 package com.example.aw_finalprojectbackend.stimmung;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import com.example.aw_finalprojectbackend.benutzer.Benutzer;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import jakarta.persistence.*;
 import jakarta.validation.constraints.Size;
 
 import java.time.LocalDateTime;
@@ -19,10 +18,15 @@ public class Stimmung {
 
     private LocalDateTime erstellungszeit;
 
+    @ManyToOne
+    @JsonIgnore
+    private Benutzer benutzer;
+
     @Size(min = 5,max = 255)
     private String kommentar;
 
-    public Stimmung(Long id, int rating, LocalDateTime erstellungszeit, String kommentar) {
+    public Stimmung(Benutzer benutzer,Long id, int rating, LocalDateTime erstellungszeit, String kommentar) {
+        this.benutzer = benutzer;
         this.stimmungId = id;
         this.rating = rating;
         this.erstellungszeit = erstellungszeit;
@@ -51,6 +55,14 @@ public class Stimmung {
     public String getErstellungszeit() {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyy HH:mm");
         return erstellungszeit.format(formatter);
+    }
+
+    public Benutzer getBenutzer() {
+        return benutzer;
+    }
+
+    public void setBenutzer(Benutzer benutzer) {
+        this.benutzer = benutzer;
     }
 
     public void setErstellungszeit(LocalDateTime erstellungszeit) {
