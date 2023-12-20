@@ -1,4 +1,3 @@
-/*
 package com.example.aw_finalprojectbackend;
 
 
@@ -30,4 +29,4 @@ public class DataLoader implements ApplicationRunner {
 
     }
 }
-*/
+
