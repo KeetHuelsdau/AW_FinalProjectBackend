@@ -2,86 +2,63 @@ package com.example.aw_finalprojectbackend.stimmung;
 
 import com.example.aw_finalprojectbackend.benutzer.Benutzer;
 import com.example.aw_finalprojectbackend.benutzer.BenutzerRepository;
-import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
+import java.util.List;
 import java.util.Optional;
 
 @Service
-public class StimmungService{
+public class StimmungService {
 
     @Autowired
     private BenutzerRepository benutzerRepository;
-    private StimmungRepository stimmungRepository;
 
-    public Optional<Benutzer> getStimmungen(String username) {
-        return benutzerRepository.findByBenutzerName(username);
+    public List<Stimmung> getStimmungen(String username) {
+        Optional<Benutzer> optionalBenutzer = benutzerRepository.findByBenutzerName(username);
+        return optionalBenutzer.map(Benutzer::getStimmungen)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST, "Keine Stimmungen eingefügt"));
     }
 
-   /* public Stimmung createStimmung(StimmungResponseDTO stimmungDTO) {
-        Stimmung stimmung = new Stimmung();
-        stimmung.setRating(stimmungDTO.getRating());
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm");
-        LocalDateTime erstellungszeit = LocalDateTime.parse(stimmungDTO.getErstellngszeit(), formatter);
-        stimmung.setErstellungszeit(erstellungszeit);
+    public boolean createStimmung(String username, Stimmung newStimmung) {
+        Optional<Benutzer> optionalBenutzer = benutzerRepository.findByBenutzerName(username);
+        if (optionalBenutzer.isPresent()) {
+            Benutzer benutzer = optionalBenutzer.get();
+            newStimmung.setBenutzer(benutzer);
+            benutzer.getStimmungen().add(newStimmung);
+            benutzerRepository.save(benutzer);
+            return true;
+        }
+        return false;
+    }
 
-        return benutzerRepository.save(stimmung);
-    }*/
-
-    public Stimmung createStimmung(StimmungResponseDTO stimmungDTO) {
-        Stimmung stimmung = new Stimmung();
-
-        stimmung.setRating(stimmungDTO.getRating());
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm");
-        LocalDateTime erstellungszeit = LocalDateTime.parse(stimmungDTO.getErstellungszeit(), formatter);
-        stimmung.setErstellungszeit(erstellungszeit);
-        stimmung.setKommentar(stimmungDTO.getKommentar());
-
-        return stimmungRepository.save(stimmung);
+    public boolean editStimmung(String username, Long stimmungId,Stimmung newStimmung) {
+        Optional<Benutzer> optionalBenutzer = benutzerRepository.findByBenutzerName(username);
+        if (optionalBenutzer.isPresent()) {
+            Benutzer benutzer = optionalBenutzer.get();
+            for (Stimmung stimmung : benutzer.getStimmungen()) {
+                if (stimmung.getStimmungId().equals(stimmungId)) {
+                    stimmung.setStimmungName(newStimmung.getStimmungName());
+                    benutzerRepository.save(benutzer);
+                    return true;
+                }
+            }
+        }
+        return false;
     }
 
 
-
-    /* public Stimmung editStimmung(String username, StimmungResponseDTO stimmungDTO) {
-        Benutzer existingBenutzer = benutzerRepository.findByBenutzerName(username)
-                .orElseThrow(() -> new EntityNotFoundException("Stimmung mit name " + username + " nicht gefunden"));
-
-        Stimmung existingStimmung = existingBenutzer.getStimmung();
-
-        existingStimmung.setRating(stimmungDTO.getRating());
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm");
-        LocalDateTime erstellungszeit = LocalDateTime.parse(stimmungDTO.getErstellngszeit(), formatter);
-        existingStimmung.setErstellungszeit(erstellungszeit);
-        existingStimmung.setKommentar(stimmungDTO.getKommentar());
-
-        benutzerRepository.save(existingBenutzer);
-
-        return existingStimmung;
-    }*/
-   public Stimmung editStimmung(Long stimmungId, StimmungResponseDTO stimmungDTO) {
-       Stimmung existingStimmung = stimmungRepository.findById(stimmungId)
-               .orElseThrow(() -> new EntityNotFoundException("Stimmung mit id " + stimmungId + " nicht gefunden"));
-
-       existingStimmung.setRating(stimmungDTO.getRating());
-       DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm");
-       LocalDateTime erstellungszeit = LocalDateTime.parse(stimmungDTO.getErstellungszeit(), formatter);
-       existingStimmung.setErstellungszeit(erstellungszeit);
-       existingStimmung.setKommentar(stimmungDTO.getKommentar());
-
-       return stimmungRepository.save(existingStimmung);
-   }
-
-
-
-    public void deleteStimmung(Long stimmungId) {
-       Stimmung existingStimmung = stimmungRepository.findById(stimmungId)
-                .orElseThrow(() -> new EntityNotFoundException("Stimmung mit id " + stimmungId + " nicht gefunden"));
-        existingStimmung.setStimmungId(null);
-
-        stimmungRepository.save(existingStimmung);
+    public boolean deleteStimmung(String username, Long stimmungId) {
+        Optional<Benutzer> optionalBenutzer = benutzerRepository.findByBenutzerName(username);
+        if (optionalBenutzer.isPresent()) {
+            Benutzer benutzer = optionalBenutzer.get();
+            benutzer.getStimmungen().removeIf(s -> s.getStimmungId().equals(stimmungId));
+            benutzerRepository.save(benutzer);
+            return true;
+        }
+        return false;
     }
 
 }

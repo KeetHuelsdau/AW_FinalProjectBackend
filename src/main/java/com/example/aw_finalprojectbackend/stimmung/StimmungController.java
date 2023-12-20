@@ -7,6 +7,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.util.List;
 import java.util.Optional;
 
 @RestController
@@ -17,47 +18,48 @@ public class StimmungController {
     private StimmungService stimmungService;
 
     @GetMapping()
-
-    public ResponseEntity<Optional<Benutzer>> getStimmungen(@RequestParam(required = false) String benutzername,
-                                                            @ModelAttribute("eingeloggterBenutzer") Optional<Benutzer> eingeloggterBenutzerOptional) {
-
-        Benutzer eingeloggterBenutzer = eingeloggterBenutzerOptional
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Login erforderlich"));
-
-        Optional<Benutzer> stimmungen = stimmungService.getStimmungen(benutzername);
-
-        return ResponseEntity.ok(stimmungen);
+    public ResponseEntity<List<Stimmung>> getStimmungen(@PathVariable String username) {
+        List<Stimmung> stimmungs = stimmungService.getStimmungen(username);
+        return ResponseEntity.ok(stimmungs);
     }
 
     @PostMapping()
-    public ResponseEntity<Stimmung> createStimmung(@RequestBody StimmungResponseDTO stimmungDTO,
-                                                   @ModelAttribute("eingeloggterBenutzer") Optional<Benutzer> eingeloggterBenutzerOptional) {
+    public ResponseEntity<String> createStimmung(@PathVariable String username, @RequestBody Stimmung newStimmung,
+                                                 @ModelAttribute("eingeloggterBenutzer") Optional<Benutzer> eingeloggterBenutzerOptional) {
 
         Benutzer eingeloggterBenutzer = eingeloggterBenutzerOptional
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Login erforderlich"));
-        Stimmung createdStimmung = stimmungService.createStimmung(stimmungDTO);
-        return ResponseEntity.ok(createdStimmung);
+        boolean created = stimmungService.createStimmung(username, newStimmung);
+        if (created) {
+            return ResponseEntity.ok("Stimmung erfolgreich erstellt");
+        } else {
+            return ResponseEntity.status(404).body("Benutzer nicht gefunden");
+        }
     }
 
     @PutMapping("/{stimmungId}")
-    public ResponseEntity<Stimmung> editStimmung(@PathVariable Long stimmungId, @RequestBody StimmungResponseDTO stimmungDTO,
-                                                 @ModelAttribute("eingeloggterBenutzer") Optional<Benutzer> eingeloggterBenutzerOptional) {
+    public ResponseEntity<String> editStimmung(@PathVariable Long stimmungId, @PathVariable String username, Stimmung newStimmung,
+                                               @ModelAttribute("eingeloggterBenutzer") Optional<Benutzer> eingeloggterBenutzerOptional) {
         Benutzer eingeloggterBenutzer = eingeloggterBenutzerOptional
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Login erforderlich"));
-        Stimmung editedStimmung = stimmungService.editStimmung(stimmungId, stimmungDTO);
+        boolean edit = stimmungService.editStimmung(username, stimmungId, newStimmung);
+        if (edit) {
+            return ResponseEntity.ok("Stimmung geändert");
+        } else {
+            return ResponseEntity.status(404).body("Stimmung nicht gefunden");
+        }
 
-        return ResponseEntity.ok(editedStimmung);
     }
 
     @DeleteMapping("/{stimmungId}")
-    public ResponseEntity<Void> deleteStimmung(@PathVariable Long stimmungId,
-                                               @ModelAttribute("eingeloggterBenutzer") Optional<Benutzer> eingeloggterBenutzerOptional) {
+    public ResponseEntity<String> deleteStimmung(@PathVariable Long stimmungId, String username,
+                                                 @ModelAttribute("eingeloggterBenutzer") Optional<Benutzer> eingeloggterBenutzerOptional) {
 
-        Benutzer eingeloggterBenutzer = eingeloggterBenutzerOptional
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Login erforderlich"));
-        stimmungService.deleteStimmung(stimmungId);
-        return ResponseEntity.noContent().build();
+        Boolean deleted = stimmungService.deleteStimmung(username, stimmungId);
+        if (deleted) {
+            return ResponseEntity.ok("Stimmung gelöscht");
+        } else {
+            return ResponseEntity.status(404).body("Stimmung nicht gefunden");
+        }
     }
 }
-
-
