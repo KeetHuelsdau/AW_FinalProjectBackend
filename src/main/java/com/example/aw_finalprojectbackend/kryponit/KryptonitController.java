@@ -35,9 +35,12 @@ public class KryptonitController {
     public Kryptonit erstelleKryptonit(@RequestBody KryptonitRequestDTO kryptonitRequestDTO, @ModelAttribute("eingeloggterBenutzer") Optional<Benutzer> eingeloggterBenutzerOptional) {
         Benutzer eingeloggterBenutzer = eingeloggterBenutzerOptional
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Login erforderlich"));
+        System.out.println("eingeloggt" + eingeloggterBenutzer);
         Kryptonit neuesKryptonit = new Kryptonit(kryptonitRequestDTO.bezeichnung(),eingeloggterBenutzer);
+        System.out.println("neu" + neuesKryptonit);
 
         List<Kryptonit> kryptoniteDesBenutzers = eingeloggterBenutzer.getKryptonite();
+        System.out.println("kryp " + kryptoniteDesBenutzers);
         kryptoniteDesBenutzers.add(neuesKryptonit); //Dem Benutzer das neue Kryponit hinzufuegen
 
         benutzerRepository.save(eingeloggterBenutzer); //Den Benutzer speichern, um das neue Kryptonit hinzuzuspeichern
@@ -46,7 +49,7 @@ public class KryptonitController {
     }
 
 /*    @DeleteMapping("/kryptonit/{kryptonitId}")
-    public void loescheKryptonit(@PathVariable Long kryptonitId, @ModelAttribute("eingeloggterBenutzer") Optional<Benutzer> eingeloggterBenutzerOptional) {
+        public Kryptonit loescheKryptonit(@PathVariable Long kryptonitId, @ModelAttribute("eingeloggterBenutzer") Optional<Benutzer> eingeloggterBenutzerOptional) {
         Benutzer eingeloggterBenutzer = eingeloggterBenutzerOptional
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Login erforderlich"));
 
@@ -61,6 +64,7 @@ public class KryptonitController {
 
         //den akutalisierten Benutzer speichen, um die Änderungen zu persisitieren
         benutzerRepository.save(eingeloggterBenutzer);
+
     }*/
 
 
