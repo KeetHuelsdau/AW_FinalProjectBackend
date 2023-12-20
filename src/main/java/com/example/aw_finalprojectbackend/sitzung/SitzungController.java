@@ -4,11 +4,9 @@ import com.example.aw_finalprojectbackend.benutzer.Benutzer;
 import com.example.aw_finalprojectbackend.benutzer.BenutzerRepository;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletResponse;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.web.bind.annotation.CookieValue;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.time.Instant;
@@ -17,8 +15,14 @@ import java.util.Optional;
 @RestController
 public class SitzungController {
 
-    private SitzungRepository sitzungRepository;
-    private BenutzerRepository benutzerRepository;
+    private final SitzungRepository sitzungRepository;
+    private final BenutzerRepository benutzerRepository;
+
+    @Autowired
+    public SitzungController(SitzungRepository sitzungRepository, BenutzerRepository benutzerRepository) {
+        this.sitzungRepository = sitzungRepository;
+        this.benutzerRepository = benutzerRepository;
+    }
 
     @PostMapping("/einloggen")
     public LoginResponseDTO login(@RequestBody LoginRequestDTO login, HttpServletResponse response) {
@@ -41,9 +45,9 @@ public class SitzungController {
 
     @PostMapping("/ausloggen")
     public LogoutResponseDTO logout(@CookieValue(value = "sitzungsId", defaultValue = "") String sitzungsId, HttpServletResponse response) {
-        Optional<Sitzung> sitzungOptional = sitzungRepository.findByIdAndAktivBisAfter(sitzungsId, Instant.now());
+        Optional<Sitzung> sitzungOptional = sitzungRepository.findBySitzungsIdAndAktivBis(sitzungsId, Instant.now());
         // Delete session in database
-        sitzungOptional.ifPresent(sitzung -> sitzungRepository.delete(sitzung));
+        sitzungOptional.ifPresent(sitzungRepository::delete);
 
         Cookie cookie = new Cookie("sitzungsId", "");
         cookie.setMaxAge(0);

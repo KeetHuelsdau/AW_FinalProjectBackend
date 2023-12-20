@@ -27,7 +27,7 @@ public class BenutzerController {
         }
         else {
             if (registerRequestDTO.passwort1().equals(registerRequestDTO.passwort2())){
-                Benutzer erstelleBenutzer = new Benutzer(registerRequestDTO.benutzerName(),registerRequestDTO.passwort1(), registerRequestDTO.vorname(),registerRequestDTO.nachname(), registerRequestDTO.alter(), registerRequestDTO.geschlecht());
+                Benutzer erstelleBenutzer = new Benutzer(registerRequestDTO.benutzerName(),registerRequestDTO.passwort1(), registerRequestDTO.vorname(),registerRequestDTO.nachname(), registerRequestDTO.geschlecht());
                 benutzerRepository.save(erstelleBenutzer);
                 return new RegisterResponseDTO(registerRequestDTO.benutzerName());
             }

@@ -18,13 +18,14 @@ public class Stimmung {
 
     private LocalDateTime erstellungszeit;
 
+    @Size(min = 5,max = 255)
+    private String kommentar;
+
     @ManyToOne
     @JsonIgnore
     private Benutzer benutzer;
 
-    @Size(min = 5,max = 255)
-    private String kommentar;
-
+    public Stimmung(Long id, int rating, LocalDateTime erstellungszeit, String kommentar) {
     public Stimmung(Benutzer benutzer,Long id, int rating, LocalDateTime erstellungszeit, String kommentar) {
         this.benutzer = benutzer;
         this.stimmungId = id;
@@ -55,14 +56,6 @@ public class Stimmung {
     public String getErstellungszeit() {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyy HH:mm");
         return erstellungszeit.format(formatter);
-    }
-
-    public Benutzer getBenutzer() {
-        return benutzer;
-    }
-
-    public void setBenutzer(Benutzer benutzer) {
-        this.benutzer = benutzer;
     }
 
     public void setErstellungszeit(LocalDateTime erstellungszeit) {

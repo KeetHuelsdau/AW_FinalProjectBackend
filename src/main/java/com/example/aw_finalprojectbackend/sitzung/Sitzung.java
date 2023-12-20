@@ -1,12 +1,14 @@
 package com.example.aw_finalprojectbackend.sitzung;
 
 import com.example.aw_finalprojectbackend.benutzer.Benutzer;
+import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.ManyToOne;
 
 import java.time.Instant;
 import java.util.UUID;
 
+@Entity
 public class Sitzung {
     @Id
     private String sitzungsId = UUID.randomUUID().toString();
