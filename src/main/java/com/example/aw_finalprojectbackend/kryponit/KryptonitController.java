@@ -26,9 +26,7 @@ public class KryptonitController {
         Benutzer eingeloggterBenutzer = eingeloggterBenutzerOptional
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Login erforderlich"));
 
-        List<Kryptonit> kryptonite = eingeloggterBenutzer.getKryptonite();
-
-        return kryptonite;
+        return eingeloggterBenutzer.getKryptonite();
     }
 
     @PostMapping("/kryptonit")

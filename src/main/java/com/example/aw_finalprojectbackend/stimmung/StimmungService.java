@@ -13,8 +13,12 @@ import java.util.Optional;
 @Service
 public class StimmungService {
 
-    @Autowired
     private BenutzerRepository benutzerRepository;
+
+    @Autowired
+    public StimmungService(BenutzerRepository benutzerRepository) {
+        this.benutzerRepository = benutzerRepository;
+    }
 
     public List<Stimmung> getStimmungen(String username) {
         Optional<Benutzer> optionalBenutzer = benutzerRepository.findByBenutzerName(username);
