@@ -24,7 +24,6 @@ public class SitzungControllerAdvice {
         this.benutzerRepository = benutzerRepository;
         this.standardBenutzerName = env.getProperty("login.default");
     }
-
     @ModelAttribute("eingeloggterBenutzer")
     public Optional<Benutzer> eingeloggterBenutzer(@CookieValue(name = "sitzungsId", defaultValue = "") String sitzungsId) {
         if(standardBenutzerName != null && !standardBenutzerName.isEmpty()){
@@ -32,7 +31,7 @@ public class SitzungControllerAdvice {
         }
 
         if (!sitzungsId.isEmpty()) {
-            Optional<Sitzung> sitzungOptional = sitzungRepository.findBySitzungsIdAndAktivBis(sitzungsId, Instant.now());
+            Optional<Sitzung> sitzungOptional = sitzungRepository.findBySitzungsIdAndAktivBisAfter(sitzungsId, Instant.now());
 
             return sitzungOptional.map(sitzung -> {
                 // new expiresAt value for the current session
