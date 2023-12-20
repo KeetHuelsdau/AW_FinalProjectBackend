@@ -26,28 +26,24 @@ public class DataLoader implements ApplicationRunner {
     public  void run(ApplicationArguments args) {
 
         Benutzer moritzrose = new Benutzer("moritzrose", "moritzrose", "Moritz", "Rose", "männlich");
-        Kryptonit schokolade = new Kryptonit("Schokolade", moritzrose);
-        Kryptonit kaffee = new Kryptonit("Kaffee", moritzrose);
-        moritzrose.getKryptonite().add(schokolade);
-        moritzrose.getKryptonite().add(kaffee);
+
+        moritzrose.getKryptonite().add(new Kryptonit("Schokolade", moritzrose));
+        moritzrose.getKryptonite().add(new Kryptonit("Kaffee", moritzrose));
         moritzrose.getKryptonite().add(new Kryptonit("Zocken", moritzrose));
 
-        Stimmung gluecklich = new Stimmung("Glücklich", moritzrose, 5, LocalDateTime.now(), "Glücklich!");
-        moritzrose.getStimmungen().add(gluecklich);
+        moritzrose.getStimmungen().add( new Stimmung("Glücklich", moritzrose, 5, LocalDateTime.now(), "Glücklich!"));
         moritzrose.getStimmungen().add(new Stimmung("Traurig", moritzrose, 3, LocalDateTime.now(), "Traurig!"));
 
         benutzerRepository.save(moritzrose);
 
 
         Benutzer igorgrab = new Benutzer("igorgrab", "igorgrab", "Igor", "Grab", "männlich");
-        Kryptonit surfen = new Kryptonit("Surfen", igorgrab);
-        Kryptonit koffein = new Kryptonit("Kaffee", igorgrab);
-        Kryptonit gaming = new Kryptonit("Gaming", igorgrab);
-        igorgrab.getKryptonite().add(surfen);
-        igorgrab.getKryptonite().add(koffein);
-        igorgrab.getKryptonite().add(gaming);
 
-        igorgrab.getStimmungen().add(new Stimmung());
+        igorgrab.getKryptonite().add(new Kryptonit("Surfen", igorgrab));
+        igorgrab.getKryptonite().add(new Kryptonit("Kaffee", igorgrab));
+        igorgrab.getKryptonite().add(new Kryptonit("Gaming", igorgrab));
+
+        igorgrab.getStimmungen().add(new Stimmung("ok", igorgrab, 3, LocalDateTime.now(), "Alles ok!"));
         benutzerRepository.save(igorgrab);
 
 
@@ -59,11 +55,8 @@ public class DataLoader implements ApplicationRunner {
         keethuelsdau.getKryptonite().add(haribo);
         keethuelsdau.getKryptonite().add(prokrastination);
 
-        keethuelsdau.getStimmungen().add(new Stimmung());
+        keethuelsdau.getStimmungen().add(new Stimmung("solala", keethuelsdau, 4, LocalDateTime.now(), "Solala!"));
         benutzerRepository.save(keethuelsdau);
-
-
-
     }
 }
 

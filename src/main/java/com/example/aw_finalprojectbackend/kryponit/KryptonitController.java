@@ -28,14 +28,17 @@ public class KryptonitController {
 
         return eingeloggterBenutzer.getKryptonite();
     }
-
     @PostMapping("/kryptonit")
     public Kryptonit erstelleKryptonit(@RequestBody KryptonitRequestDTO kryptonitRequestDTO, @ModelAttribute("eingeloggterBenutzer") Optional<Benutzer> eingeloggterBenutzerOptional) {
         Benutzer eingeloggterBenutzer = eingeloggterBenutzerOptional
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Login erforderlich"));
+
         Kryptonit neuesKryptonit = new Kryptonit(kryptonitRequestDTO.bezeichnung(),eingeloggterBenutzer);
 
         List<Kryptonit> kryptoniteDesBenutzers = eingeloggterBenutzer.getKryptonite();
+        if(kryptoniteDesBenutzers.stream().anyMatch(k -> k.getBezeichnung().equals(neuesKryptonit.getBezeichnung()))){
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Kryponit existiert bereits in der Liste");
+        }
 
         kryptoniteDesBenutzers.add(neuesKryptonit); //Dem Benutzer das neue Kryponit hinzufuegen
 
