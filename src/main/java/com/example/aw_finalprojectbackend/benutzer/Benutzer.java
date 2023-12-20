@@ -1,7 +1,11 @@
 package com.example.aw_finalprojectbackend.benutzer;
 
+import com.example.aw_finalprojectbackend.kryponit.Kryptonit;
+import com.example.aw_finalprojectbackend.stimmung.Stimmung;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
+
+import java.util.List;
 
 @Entity
 public class Benutzer {
@@ -18,23 +22,21 @@ public class Benutzer {
 
     String vorname;
     String nachname;
-    int alter;
     String geschlecht;
 
-    @OneToMany(mappedBy = "Stimmung", cascade = CascadeType.ALL, orphanRemoval = true)
-    List <Stimmung> stimmungen;
-    @OneToMany(mappedBy = "Kryptonit", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "benutzer", cascade = CascadeType.ALL)
+    List<Stimmung> stimmungen;
+    @OneToMany(mappedBy = "benutzer", cascade = CascadeType.ALL)
     List <Kryptonit> kryptonite;
 
     public Benutzer() {
     }
 
-    public Benutzer(String benutzerName, String passwort, String vorname, String nachname, int alter, String geschlecht) {
+    public Benutzer(String benutzerName, String passwort, String vorname, String nachname, String geschlecht) {
         this.benutzerName = benutzerName;
         this.passwort = passwort;
         this.vorname = vorname;
         this.nachname = nachname;
-        this.alter = alter;
         this.geschlecht = geschlecht;
     }
 }
