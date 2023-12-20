@@ -6,6 +6,6 @@ import java.time.Instant;
 import java.util.Optional;
 
 public interface SitzungRepository extends JpaRepository<Sitzung, Long> {
-    Optional<Sitzung> findByIdAndAktivBisAfter(String id, Instant expiresAt);
+    Optional<Sitzung> findBySitzungsIdAndAktivBis(String id, Instant expiresAt);
 
 }

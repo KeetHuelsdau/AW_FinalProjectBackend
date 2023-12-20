@@ -1,9 +1,8 @@
 package com.example.aw_finalprojectbackend.stimmung;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import com.example.aw_finalprojectbackend.benutzer.Benutzer;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import jakarta.persistence.*;
 import jakarta.validation.constraints.Size;
 
 import java.time.LocalDateTime;
@@ -21,6 +20,10 @@ public class Stimmung {
 
     @Size(min = 5,max = 255)
     private String kommentar;
+
+    @ManyToOne
+    @JsonIgnore
+    private Benutzer benutzer;
 
     public Stimmung(Long id, int rating, LocalDateTime erstellungszeit, String kommentar) {
         this.stimmungId = id;
