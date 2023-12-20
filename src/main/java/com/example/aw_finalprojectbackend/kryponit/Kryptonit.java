@@ -19,6 +19,15 @@ public class Kryptonit {
     @JsonIgnore
     private Benutzer benutzer;
 
+    public Kryptonit() {
+    }
+
+    public Kryptonit(String bezeichnung, Benutzer benutzer) {
+        this.bezeichnung = bezeichnung;
+        this.haeufigkeit = 0;
+        this.benutzer = benutzer;
+    }
+
     public void setKryptonitId(Long kryptonitId) {
         this.kryptonitId = kryptonitId;
     }
