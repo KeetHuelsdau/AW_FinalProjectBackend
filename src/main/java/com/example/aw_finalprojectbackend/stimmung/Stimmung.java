@@ -14,6 +14,8 @@ public class Stimmung {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long stimmungId;
 
+    private String stimmungName;
+
     private int rating;
 
     private LocalDateTime erstellungszeit;
@@ -25,7 +27,9 @@ public class Stimmung {
     @JsonIgnore
     private Benutzer benutzer;
 
-    public Stimmung(Long id, int rating, LocalDateTime erstellungszeit, String kommentar) {
+    public Stimmung(String stimmungName, Benutzer benutzer,Long id, int rating, LocalDateTime erstellungszeit, String kommentar) {
+        this.benutzer = benutzer;
+        this.stimmungName = stimmungName;
         this.stimmungId = id;
         this.rating = rating;
         this.erstellungszeit = erstellungszeit;
@@ -33,6 +37,22 @@ public class Stimmung {
     }
 
     public Stimmung() {
+    }
+
+    public String getStimmungName() {
+        return stimmungName;
+    }
+
+    public void setStimmungName(String stimmungName) {
+        this.stimmungName = stimmungName;
+    }
+
+    public Benutzer getBenutzer() {
+        return benutzer;
+    }
+
+    public void setBenutzer(Benutzer benutzer) {
+        this.benutzer = benutzer;
     }
 
     public Long getStimmungId() {
