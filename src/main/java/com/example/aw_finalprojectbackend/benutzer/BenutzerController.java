@@ -25,7 +25,7 @@ public class BenutzerController {
     }
 
     @PostMapping("/einloggen")
-    public LoginResponseDTO login(@RequestBody LoginRequestDTO login, HttpServletResponse response) {
+    public LoginResponseDTO einloggen(@RequestBody LoginRequestDTO login, HttpServletResponse response) {
         Optional<Benutzer> benutzerOptional = benutzerRepository.findByBenutzerNameAndPasswort(login.benutzerName(), login.passwort());
 
         if (benutzerOptional.isPresent()) {
@@ -39,6 +39,27 @@ public class BenutzerController {
             return new LoginResponseDTO("Erfolgreich eingeloggt!",login.benutzerName());
         }
         throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Benutzername oder Passwort ist nicht korrekt");
+    }
+
+    @PostMapping("/login")
+    public LoginResponseDTO login(@RequestBody LoginRequestDTO login, HttpServletResponse response) {
+        Optional<Benutzer> benutzerOptional = benutzerRepository.findByBenutzerNameAndPasswort(login.benutzerName(), login.passwort());
+
+        if (benutzerOptional.isPresent()) {
+            //expires one week from now
+            Sitzung sitzung = new Sitzung(benutzerOptional.get(), Instant.now().plusSeconds(7*24*60*60));
+            sitzungRepository.save(sitzung);
+
+            //store the session ID in a cookie
+            Cookie cookie = new Cookie("sitzungsId", sitzung.getSitzungsId());
+            response.addCookie(cookie);
+
+            // Login successful
+            return new LoginResponseDTO("Alles tutti",login.benutzerName());
+        }
+
+        // When login-does not work
+        throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "No such username or wrong password");
     }
 
     @PostMapping("/ausloggen")
