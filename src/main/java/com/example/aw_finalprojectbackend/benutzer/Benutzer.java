@@ -98,15 +98,6 @@ public class Benutzer {
     public void setStimmungen(List<Stimmung> stimmungen) {
         this.stimmungen = stimmungen;
     }
-
-    public List<Kryptonit> getKryptonite() {
-        return kryptonite;
-    }
-
-    public void setKryptonite(List<Kryptonit> kryptonite) {
-        this.kryptonite = kryptonite;
-    }
-
     public List<Kryptonit> getKryptonite() {
         return kryptonite;
     }
