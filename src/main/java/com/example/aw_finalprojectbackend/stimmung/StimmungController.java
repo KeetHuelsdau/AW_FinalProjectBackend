@@ -1,6 +1,9 @@
 package com.example.aw_finalprojectbackend.stimmung;
 
+import com.example.aw_finalprojectbackend.ListenSammlung;
 import com.example.aw_finalprojectbackend.benutzer.Benutzer;
+import com.example.aw_finalprojectbackend.benutzer.Benutzer;
+import com.example.aw_finalprojectbackend.benutzer.BenutzerRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -23,11 +26,12 @@ public class StimmungController {
     }
 
     @GetMapping("/stimmungen")
-    public ResponseEntity<List<?>> erhalteAlleStimmungen(
+    public ResponseEntity<?> erhalteAlleStimmungen(
             @ModelAttribute("eingeloggterBenutzer") Optional<Benutzer> eingeloggterBenutzerOptional) {
         if (eingeloggterBenutzerOptional.isPresent()) {
             Benutzer eingeloggterBenutzer = eingeloggterBenutzerOptional.get();
-            return ResponseEntity.ok(eingeloggterBenutzer.getStimmungen());
+            return ResponseEntity.ok(new ListenSammlung(eingeloggterBenutzer.getStimmungen()));
+
         } else {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(Collections.singletonList("Login erforderlich"));
         }

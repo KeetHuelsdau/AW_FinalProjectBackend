@@ -1,5 +1,6 @@
 package com.example.aw_finalprojectbackend.kryponit;
 
+import com.example.aw_finalprojectbackend.ListenSammlung;
 import com.example.aw_finalprojectbackend.benutzer.Benutzer;
 import com.example.aw_finalprojectbackend.benutzer.BenutzerRepository;
 import com.example.aw_finalprojectbackend.kryponit.kryptonitEintraege.KryptonitEintrag;
@@ -27,10 +28,10 @@ public class KryptonitController {
     }
 
     @GetMapping("/kryptonite")
-    public ResponseEntity<List<?>> erhalteAlleKryptonite(@ModelAttribute("eingeloggterBenutzer") Optional<Benutzer> eingeloggterBenutzerOptional) {
+    public ResponseEntity<?> erhalteAlleKryptonite(@ModelAttribute("eingeloggterBenutzer") Optional<Benutzer> eingeloggterBenutzerOptional) {
         if (eingeloggterBenutzerOptional.isPresent()) {
             Benutzer eingeloggterBenutzer = eingeloggterBenutzerOptional.get();
-            return ResponseEntity.ok(eingeloggterBenutzer.getKryptonite());
+            return ResponseEntity.ok(new ListenSammlung(eingeloggterBenutzer.getKryptonite()));
         } else {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(Collections.singletonList("Login erforderlich"));
         }
