@@ -23,8 +23,12 @@ public class StimmungController {
     }
 
     @GetMapping()
-    public ResponseEntity<List<Stimmung>> getStimmungen(@RequestParam String username) {
-        List<Stimmung> stimmungs = stimmungService.getStimmungen(username);
+    public ResponseEntity<List<Stimmung>> getStimmungen(
+                                                        @ModelAttribute("eingeloggterBenutzer") Optional<Benutzer> eingeloggterBenutzerOptional) {
+        Benutzer eingeloggterBenutzer = eingeloggterBenutzerOptional
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Login erforderlich"));
+
+        List<Stimmung> stimmungs = stimmungService.getStimmungen(eingeloggterBenutzer.getBenutzerName());
         return ResponseEntity.ok(stimmungs);
     }
 
@@ -34,6 +38,7 @@ public class StimmungController {
 
         Benutzer eingeloggterBenutzer = eingeloggterBenutzerOptional
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Login erforderlich"));
+
         boolean created = stimmungService.createStimmung(eingeloggterBenutzer.getBenutzerName(), stimmungDTO);
         if (created) {
             return ResponseEntity.status(HttpStatus.CREATED).body("Stimmung erfolgreich erstellt");
@@ -47,6 +52,7 @@ public class StimmungController {
                                                @ModelAttribute("eingeloggterBenutzer") Optional<Benutzer> eingeloggterBenutzerOptional) {
         Benutzer eingeloggterBenutzer = eingeloggterBenutzerOptional
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Login erforderlich"));
+
         boolean edit = stimmungService.editStimmung(eingeloggterBenutzer.getBenutzerName(), stimmungId, stimmungDTO);
         if (edit) {
             return ResponseEntity.status(HttpStatus.ACCEPTED).body("Stimmung geändert");
@@ -57,9 +63,12 @@ public class StimmungController {
     }
 
     @DeleteMapping("/{stimmungId}")
-    public ResponseEntity<String> deleteStimmung(@PathVariable Long stimmungId, String username,
+    public ResponseEntity<String> deleteStimmung(@PathVariable Long stimmungId,
                                                  @ModelAttribute("eingeloggterBenutzer") Optional<Benutzer> eingeloggterBenutzerOptional) {
-        boolean deleted = stimmungService.deleteStimmung(stimmungId,username);
+        Benutzer eingeloggterBenutzer = eingeloggterBenutzerOptional
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Login erforderlich"));
+
+        boolean deleted = stimmungService.deleteStimmung(stimmungId,eingeloggterBenutzer.getBenutzerName());
         if (deleted) {
             return ResponseEntity.status(HttpStatus.ACCEPTED).body("Stimmung gelöscht");
         } else {

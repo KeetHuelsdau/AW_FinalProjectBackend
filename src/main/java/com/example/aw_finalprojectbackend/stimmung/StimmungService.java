@@ -26,7 +26,7 @@ public class StimmungService {
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST, "Keine Stimmungen eingefügt"));
     }
 
-    public boolean createStimmung(String username, StimmungRequestDTO stimmungDTO) {
+    public boolean createStimmung(String username, StimmungRequestDTO stimmungRequestDTO) {
         Optional<Benutzer> optionalBenutzer = benutzerRepository.findByBenutzerName(username);
         if (optionalBenutzer.isPresent()) {
             Benutzer benutzer = optionalBenutzer.get();
@@ -36,13 +36,13 @@ public class StimmungService {
         return false;
     }
 
-    public boolean editStimmung(String username, Long stimmungId,StimmungResponseDTO stimmungDTO) {
+    public boolean editStimmung(String username, Long stimmungId,StimmungResponseDTO stimmungResponseDTO) {
         Optional<Benutzer> optionalBenutzer = benutzerRepository.findByBenutzerName(username);
         if (optionalBenutzer.isPresent()) {
             Benutzer benutzer = optionalBenutzer.get();
             for (Stimmung stimmung : benutzer.getStimmungen()) {
                 if (stimmung.getStimmungId().equals(stimmungId)) {
-                    stimmung.setStimmungName(stimmungDTO.getStimmungName());
+                    stimmung.setStimmungName(stimmungResponseDTO.getStimmungName());
                     benutzerRepository.save(benutzer);
                     return true;
                 }
