@@ -3,6 +3,8 @@ package com.example.aw_finalprojectbackend.stimmung;
 import com.example.aw_finalprojectbackend.benutzer.Benutzer;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Max;
+import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.Size;
 
 import java.time.LocalDateTime;
@@ -14,7 +16,8 @@ public class Stimmung {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long stimmungId;
 
-
+    @Min(1)
+    @Max(6)
     private int rating;
 
     private LocalDateTime erstellungszeit;
@@ -57,6 +60,9 @@ public class Stimmung {
     }
 
     public void setRating(int rating) {
+        if (rating < 1 || rating > 6) {
+            throw new IllegalArgumentException("Rating muss im Bereich von 1 bis 6 liegen");
+        }
         this.rating = rating;
     }
 
