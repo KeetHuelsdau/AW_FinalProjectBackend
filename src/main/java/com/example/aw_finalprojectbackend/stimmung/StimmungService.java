@@ -13,7 +13,7 @@ import java.util.Optional;
 @Service
 public class StimmungService {
 
-    private BenutzerRepository benutzerRepository;
+    private final BenutzerRepository benutzerRepository;
 
     @Autowired
     public StimmungService(BenutzerRepository benutzerRepository) {
@@ -26,25 +26,23 @@ public class StimmungService {
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST, "Keine Stimmungen eingefügt"));
     }
 
-    public boolean createStimmung(String username, Stimmung newStimmung) {
+    public boolean createStimmung(String username, StimmungRequestDTO stimmungDTO) {
         Optional<Benutzer> optionalBenutzer = benutzerRepository.findByBenutzerName(username);
         if (optionalBenutzer.isPresent()) {
             Benutzer benutzer = optionalBenutzer.get();
-            newStimmung.setBenutzer(benutzer);
-            benutzer.getStimmungen().add(newStimmung);
             benutzerRepository.save(benutzer);
             return true;
         }
         return false;
     }
 
-    public boolean editStimmung(String username, Long stimmungId,Stimmung newStimmung) {
+    public boolean editStimmung(String username, Long stimmungId,StimmungResponseDTO stimmungDTO) {
         Optional<Benutzer> optionalBenutzer = benutzerRepository.findByBenutzerName(username);
         if (optionalBenutzer.isPresent()) {
             Benutzer benutzer = optionalBenutzer.get();
             for (Stimmung stimmung : benutzer.getStimmungen()) {
                 if (stimmung.getStimmungId().equals(stimmungId)) {
-                    stimmung.setStimmungName(newStimmung.getStimmungName());
+                    stimmung.setStimmungName(stimmungDTO.getStimmungName());
                     benutzerRepository.save(benutzer);
                     return true;
                 }
@@ -54,7 +52,7 @@ public class StimmungService {
     }
 
 
-    public boolean deleteStimmung(String username, Long stimmungId) {
+    public boolean deleteStimmung(Long stimmungId,String username) {
         Optional<Benutzer> optionalBenutzer = benutzerRepository.findByBenutzerName(username);
         if (optionalBenutzer.isPresent()) {
             Benutzer benutzer = optionalBenutzer.get();
