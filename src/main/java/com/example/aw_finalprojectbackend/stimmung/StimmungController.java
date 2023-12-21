@@ -32,18 +32,16 @@ public class StimmungController {
     }
 
     @PostMapping("/stimmung")
-    public ResponseEntity<String> erstelleStimmung(@RequestBody StimmungRequestDTO stimmungDTO,
+    public ResponseEntity<StimmungResponseDTO> erstelleStimmung(@RequestBody StimmungRequestDTO stimmungDTO,
                                                    @ModelAttribute("eingeloggterBenutzer") Optional<Benutzer> eingeloggterBenutzerOptional) {
 
         Benutzer eingeloggterBenutzer = eingeloggterBenutzerOptional
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Login erforderlich"));
 
-        boolean created = stimmungService.createStimmung(eingeloggterBenutzer.getBenutzerName(), stimmungDTO);
-        if (created) {
-            return ResponseEntity.status(HttpStatus.CREATED).body("Stimmung erfolgreich erstellt");
-        } else {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Benutzer nicht gefunden");
-        }
+        Stimmung neueStimmung = stimmungService.createStimmung(eingeloggterBenutzer, stimmungDTO);
+
+            return ResponseEntity.status(HttpStatus.CREATED).body(new StimmungResponseDTO(neueStimmung,"Stimmung erfolgreich erstellt"));
+
     }
 
     @PutMapping("/stimmung/{stimmungId}")

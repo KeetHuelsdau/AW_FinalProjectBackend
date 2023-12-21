@@ -27,12 +27,10 @@ public class Stimmung {
     @JsonIgnore
     private Benutzer benutzer;
 
-    public Stimmung(String stimmungName, Benutzer benutzer, int rating, LocalDateTime erstellungszeit, String kommentar) {
-        this.benutzer = benutzer;
-        this.stimmungName = stimmungName;
+    public Stimmung(Benutzer benutzer, int rating, String kommentar) {
         this.benutzer = benutzer;
         this.rating = rating;
-        this.erstellungszeit = erstellungszeit;
+        this.erstellungszeit = LocalDateTime.now();
         this.kommentar = kommentar;
     }
 
