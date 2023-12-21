@@ -3,6 +3,8 @@ package com.example.aw_finalprojectbackend.stimmung;
 import com.example.aw_finalprojectbackend.benutzer.Benutzer;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Max;
+import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.Size;
 
 import java.time.LocalDateTime;
@@ -14,38 +16,27 @@ public class Stimmung {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long stimmungId;
 
-    private String stimmungName;
-
+    @Min(1)
+    @Max(6)
     private int rating;
 
     private LocalDateTime erstellungszeit;
 
-    @Size(min = 5,max = 255)
+    @Size(min = 5, max = 255)
     private String kommentar;
 
     @ManyToOne
     @JsonIgnore
     private Benutzer benutzer;
 
-    public Stimmung(String stimmungName, Benutzer benutzer, int rating, LocalDateTime erstellungszeit, String kommentar) {
-        this.stimmungName = stimmungName;
+    public Stimmung(Benutzer benutzer, int rating, String kommentar) {
         this.benutzer = benutzer;
         this.rating = rating;
-        this.erstellungszeit = erstellungszeit;
+        this.erstellungszeit = LocalDateTime.now();
         this.kommentar = kommentar;
     }
 
     public Stimmung() {
-    }
-
-
-
-    public String getStimmungName() {
-        return stimmungName;
-    }
-
-    public void setStimmungName(String stimmungName) {
-        this.stimmungName = stimmungName;
     }
 
     public Benutzer getBenutzer() {
@@ -69,6 +60,9 @@ public class Stimmung {
     }
 
     public void setRating(int rating) {
+        if (rating < 1 || rating > 6) {
+            throw new IllegalArgumentException("Rating muss im Bereich von 1 bis 6 liegen");
+        }
         this.rating = rating;
     }
 
