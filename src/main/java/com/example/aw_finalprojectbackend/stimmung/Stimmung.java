@@ -28,6 +28,7 @@ public class Stimmung {
     private Benutzer benutzer;
 
     public Stimmung(String stimmungName, Benutzer benutzer, int rating, LocalDateTime erstellungszeit, String kommentar) {
+        this.benutzer = benutzer;
         this.stimmungName = stimmungName;
         this.benutzer = benutzer;
         this.rating = rating;

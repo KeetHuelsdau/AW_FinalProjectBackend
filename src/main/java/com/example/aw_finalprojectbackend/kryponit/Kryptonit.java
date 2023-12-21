@@ -1,11 +1,11 @@
 package com.example.aw_finalprojectbackend.kryponit;
 
 import com.example.aw_finalprojectbackend.benutzer.Benutzer;
+import com.example.aw_finalprojectbackend.kryponit.kryptonitEintraege.KryptonitEintrag;
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
-import jakarta.persistence.ManyToOne;
+import jakarta.persistence.*;
+
+import java.util.List;
 
 @Entity
 public class Kryptonit {
@@ -13,18 +13,19 @@ public class Kryptonit {
     @GeneratedValue
     private Long kryptonitId;
     private String bezeichnung;
-    private int haeufigkeit;
 
     @ManyToOne
     @JsonIgnore
     private Benutzer benutzer;
+
+    @OneToMany(mappedBy = "kryptonit", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<KryptonitEintrag> taeglicheEintraege;
 
     public Kryptonit() {
     }
 
     public Kryptonit(String bezeichnung, Benutzer benutzer) {
         this.bezeichnung = bezeichnung;
-        this.haeufigkeit = 0;
         this.benutzer = benutzer;
     }
     public Long getKryptonitId() {
@@ -38,11 +39,7 @@ public class Kryptonit {
         this.bezeichnung = bezeichnung;
     }
 
-    public int getHaeufigkeit() {
-        return haeufigkeit;
-    }
-
-    public void setHaeufigkeit(int haeufigkeit) {
-        this.haeufigkeit = haeufigkeit;
+    public List<KryptonitEintrag> getTaeglicheEintraege() {
+        return taeglicheEintraege;
     }
 }
