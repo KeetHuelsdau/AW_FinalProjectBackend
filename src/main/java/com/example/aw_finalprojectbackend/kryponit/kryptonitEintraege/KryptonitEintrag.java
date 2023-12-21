@@ -13,7 +13,6 @@ public class KryptonitEintrag {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     Long kryptonitEintragId;
 
-    @Column(unique = true)
     LocalDateTime zeitpunkt;
 
     int haeufigkeit;
@@ -36,5 +35,9 @@ public class KryptonitEintrag {
 
     public int getHaeufigkeit() {
         return haeufigkeit;
+    }
+
+    public void setHaeufigkeit(int haeufigkeit) {
+        this.haeufigkeit = haeufigkeit;
     }
 }

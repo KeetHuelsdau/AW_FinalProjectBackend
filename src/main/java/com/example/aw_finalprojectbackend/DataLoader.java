@@ -5,6 +5,7 @@ import com.example.aw_finalprojectbackend.benutzer.Benutzer;
 import com.example.aw_finalprojectbackend.benutzer.BenutzerRepository;
 import com.example.aw_finalprojectbackend.kryponit.Kryptonit;
 import com.example.aw_finalprojectbackend.kryponit.KryptonitRequestDTO;
+import com.example.aw_finalprojectbackend.kryponit.kryptonitEintraege.KryptonitEintrag;
 import com.example.aw_finalprojectbackend.stimmung.Stimmung;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.ApplicationArguments;
@@ -27,9 +28,15 @@ public class DataLoader implements ApplicationRunner {
 
         Benutzer moritzrose = new Benutzer("moritzrose", "moritzrose", "Moritz", "Rose", "männlich");
 
-        moritzrose.getKryptonite().add(new Kryptonit("Schokolade", moritzrose));
-        moritzrose.getKryptonite().add(new Kryptonit("Kaffee", moritzrose));
+        Kryptonit schokolade = new Kryptonit("Schokolade", moritzrose);
+        Kryptonit kaffee = new Kryptonit("Kaffee", moritzrose);
+
+        moritzrose.getKryptonite().add(schokolade);
+        moritzrose.getKryptonite().add(kaffee);
         moritzrose.getKryptonite().add(new Kryptonit("Zocken", moritzrose));
+
+        moritzrose.getKryptonite().get(0).getTaeglicheEintraege().add(new KryptonitEintrag(3,schokolade));
+        moritzrose.getKryptonite().get(1).getTaeglicheEintraege().add(new KryptonitEintrag(5,kaffee));
 
         moritzrose.getStimmungen().add( new Stimmung("Glücklich", moritzrose, 5, LocalDateTime.now(), "Glücklich!"));
         moritzrose.getStimmungen().add(new Stimmung("Traurig", moritzrose, 3, LocalDateTime.now(), "Traurig!"));
