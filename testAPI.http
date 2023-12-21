@@ -1,4 +1,4 @@
-//-------------------------------------------------UserEndpoints---------------------------------------------------
+//-------------------------------------------------BenutzerEndpunkte---------------------------------------------------
 
 ### Login user
 POST http://localhost:8080/einloggen
@@ -18,6 +18,29 @@ POST http://localhost:8080/register
 Content-Type:application/json
 
 {
-  "benutzerName":"tillhueser" ,  "passwort1":"tillhueser" ,  "passwort2":"tillhueser" ,  "vorname":"Till" ,  "nachname":"Hüser" ,  "geschlecht":"männlich"
+  "benutzerName":"tillhueser",
+  "passwort1":"tillhueser",  "passwort2":"tillhueser",
+  "vorname":"Till",
+  "nachname":"Hüser",
+  "geschlecht":"männlich"
+}
+###
+
+//-------------------------------------------------KryptonitEndpunkte---------------------------------------------------
+
+### Ändere Kryptonitbezeichnung
+PUT http://localhost:8080/kryptonit/2
+Content-Type:application/json
+
+{
+  "veraenderterName": "NichtZocken!"
 }
 
+### Füge neuen Kryptoniteintrag hinzu
+
+POST http://localhost:8080//kryptonit/2/eintrag
+Content-Type:application/json
+
+{
+  "haeufigkeit": 4
+}

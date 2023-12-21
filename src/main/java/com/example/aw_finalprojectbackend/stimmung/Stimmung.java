@@ -27,7 +27,7 @@ public class Stimmung {
     @JsonIgnore
     private Benutzer benutzer;
 
-    public Stimmung(String stimmungName, Benutzer benutzer,Long id, int rating, LocalDateTime erstellungszeit, String kommentar) {
+    public Stimmung(String stimmungName, Benutzer benutzer, int rating, LocalDateTime erstellungszeit, String kommentar) {
         this.benutzer = benutzer;
         this.stimmungName = stimmungName;
         this.rating = rating;
