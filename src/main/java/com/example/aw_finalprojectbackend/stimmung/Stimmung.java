@@ -14,13 +14,12 @@ public class Stimmung {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long stimmungId;
 
-    private String stimmungName;
 
     private int rating;
 
     private LocalDateTime erstellungszeit;
 
-    @Size(min = 5,max = 255)
+    @Size(min = 5, max = 255)
     private String kommentar;
 
     @ManyToOne
@@ -35,16 +34,6 @@ public class Stimmung {
     }
 
     public Stimmung() {
-    }
-
-
-
-    public String getStimmungName() {
-        return stimmungName;
-    }
-
-    public void setStimmungName(String stimmungName) {
-        this.stimmungName = stimmungName;
     }
 
     public Benutzer getBenutzer() {

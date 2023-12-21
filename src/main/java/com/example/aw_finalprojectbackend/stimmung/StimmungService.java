@@ -3,10 +3,9 @@ package com.example.aw_finalprojectbackend.stimmung;
 import com.example.aw_finalprojectbackend.benutzer.Benutzer;
 import com.example.aw_finalprojectbackend.benutzer.BenutzerRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
-import org.springframework.web.server.ResponseStatusException;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
@@ -20,46 +19,43 @@ public class StimmungService {
         this.benutzerRepository = benutzerRepository;
     }
 
-    public List<Stimmung> getStimmungen(String username) {
-        Optional<Benutzer> optionalBenutzer = benutzerRepository.findByBenutzerName(username);
-        return optionalBenutzer.map(Benutzer::getStimmungen)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST, "Keine Stimmungen eingefügt"));
+    public List<Stimmung> erhalteAlleStimmungen(Benutzer benutzer) {
+        if (benutzer != null) {
+            return benutzer.getStimmungen();
+        } else {
+            return Collections.emptyList();
+        }
     }
 
-    public Stimmung createStimmung(Benutzer benutzer, StimmungRequestDTO stimmungRequestDTO) {
-        Stimmung stimmung = new Stimmung(benutzer,stimmungRequestDTO.rating(),stimmungRequestDTO.kommentar());
-
+    public Stimmung erstelleStimmung(Benutzer benutzer, StimmungRequestDTO stimmungRequestDTO) {
+        Stimmung stimmung = new Stimmung(benutzer, stimmungRequestDTO.rating(), stimmungRequestDTO.kommentar());
         benutzer.getStimmungen().add(stimmung);
-
-            benutzerRepository.save(benutzer);
-            return stimmung;
-
+        benutzerRepository.save(benutzer);
+        return stimmung;
     }
 
-    public boolean editStimmung(String username, Long stimmungId,StimmungResponseDTO stimmungResponseDTO) {
-        Optional<Benutzer> optionalBenutzer = benutzerRepository.findByBenutzerName(username);
-        if (optionalBenutzer.isPresent()) {
-            Benutzer benutzer = optionalBenutzer.get();
-            for (Stimmung stimmung : benutzer.getStimmungen()) {
-                if (stimmung.getStimmungId().equals(stimmungId)) {
-                    benutzerRepository.save(benutzer);
-                    return true;
-                }
+    public Stimmung editiereStimmung(Benutzer benutzer, Long stimmungId, StimmungRequestDTO stimmungRequestDTO) {
+        for (Stimmung stimmung : benutzer.getStimmungen()) {
+            if (stimmung.getStimmungId().equals(stimmungId)) {
+                stimmung.setRating(stimmungRequestDTO.rating());
+                stimmung.setKommentar(stimmungRequestDTO.kommentar());
+                benutzerRepository.save(benutzer);
+                return stimmung;
             }
         }
-        return false;
+        Stimmung neueStimmung = new Stimmung(benutzer, stimmungRequestDTO.rating(), stimmungRequestDTO.kommentar());
+        benutzer.getStimmungen().add(neueStimmung);
+        benutzerRepository.save(benutzer);
+        return neueStimmung;
     }
 
 
-    public boolean deleteStimmung(Long stimmungId,String username) {
-        Optional<Benutzer> optionalBenutzer = benutzerRepository.findByBenutzerName(username);
-        if (optionalBenutzer.isPresent()) {
-            Benutzer benutzer = optionalBenutzer.get();
+    public boolean loescheStimmung(Long stimmungId, Benutzer benutzer) {
+        if (benutzer != null) {
             benutzer.getStimmungen().removeIf(s -> s.getStimmungId().equals(stimmungId));
             benutzerRepository.save(benutzer);
             return true;
         }
         return false;
     }
-
 }
