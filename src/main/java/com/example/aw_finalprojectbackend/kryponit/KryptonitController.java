@@ -64,6 +64,26 @@ public class KryptonitController {
         return eingeloggterBenutzer.getKryptonite();
     }
 
+    @PutMapping("kryptonit/{kryptonitId}")
+    public List<Kryptonit> veraendereKryptonitHaeufigkeit(@PathVariable Long kryptonitId, @RequestBody KryptonitVeraendertRequestDTO kryptonitVeraendertRequestDTO, @ModelAttribute("eingeloggterBenutzer") Optional<Benutzer> eingeloggterBenutzerOptional) {
+        Benutzer eingeloggterBenutzer = eingeloggterBenutzerOptional
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Login erforderlich"));
+
+        List<Kryptonit> kryponiteDesBenutzers = eingeloggterBenutzer.getKryptonite();
+
+        Optional<Kryptonit> veraendertesKryptonitOptional = kryponiteDesBenutzers.stream()
+                .filter(kryptonit -> kryptonit.getKryptonitId().equals(kryptonitId))
+                .findFirst();
+
+        if(veraendertesKryptonitOptional.isPresent()){
+            Kryptonit veraendertesKryptonit = veraendertesKryptonitOptional.get();
+            veraendertesKryptonit.setHaeufigkeit(kryptonitVeraendertRequestDTO.veraenderteHaeufigkeit());
+            veraendertesKryptonit.setBezeichnung(kryptonitVeraendertRequestDTO.veraenderterName());
+        }
+        benutzerRepository.save(eingeloggterBenutzer);
+        return kryponiteDesBenutzers;
+    }
+
 
     // TODO : @PutMapping("/kryptonit/{kryptonitId}")
 /*    public Kryptonit aktualisiereKryptonitWert(@PathVariable Long id, @RequestParam int neuerKryptonitWert, @ModelAttribute("eingeloggterBenutzer") Optional<Benutzer> eingeloggterBenutzerOptional) {
