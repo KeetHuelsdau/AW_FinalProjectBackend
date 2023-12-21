@@ -42,7 +42,7 @@ public class KryptonitController {
 
         kryptoniteDesBenutzers.add(neuesKryptonit); //Dem Benutzer das neue Kryponit hinzufuegen
 
-        benutzerRepository.save(eingeloggterBenutzer); //Den Benutzer speichern, um das neue Kryptonit hinzuzuspeichern
+        benutzerRepository.save(eingeloggterBenutzer); //Den Benutzer speichern, um das neue Kryptonit zur DB hinzuzuspeichern
 
         return neuesKryptonit;
     }
@@ -58,7 +58,7 @@ public class KryptonitController {
         //Nach dem Kryptonit mit der gegebenen ID suchen und es aus der Liste entfernen
         kryponiteDesBenutzers.removeIf(kryptonit -> kryptonit.getKryptonitId().equals(kryptonitId));
 
-        //den akutalisierten Benutzer speichen, um die Änderungen zu persisitieren
+        //den akutalisierten Benutzer speichen, um die Änderungen zu persistieren
         benutzerRepository.save(eingeloggterBenutzer);
 
         return eingeloggterBenutzer.getKryptonite();
@@ -77,11 +77,10 @@ public class KryptonitController {
 
         if(veraendertesKryptonitOptional.isPresent()){
             Kryptonit veraendertesKryptonit = veraendertesKryptonitOptional.get();
-            veraendertesKryptonit.setHaeufigkeit(kryptonitVeraendertRequestDTO.veraenderteHaeufigkeit());
             veraendertesKryptonit.setBezeichnung(kryptonitVeraendertRequestDTO.veraenderterName());
-        }
-        benutzerRepository.save(eingeloggterBenutzer);
-        return kryponiteDesBenutzers;
+            benutzerRepository.save(eingeloggterBenutzer);
+            return kryponiteDesBenutzers;
+        } throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Kryptonit nicht vorhanden oder aktueller Benutzer hat keinen Zugriff auf dieses Kryptonit!");
     }
-aktu}
+}
 
