@@ -33,14 +33,15 @@ public class KryptonitController {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(Collections.singletonList("Login erforderlich"));
         }
     }
+
     @PostMapping("/kryptonit")
     public ResponseEntity<?> erstelleKryptonit(@RequestBody KryptonitRequestDTO kryptonitRequestDTO, @ModelAttribute("eingeloggterBenutzer") Optional<Benutzer> eingeloggterBenutzerOptional) {
         if (eingeloggterBenutzerOptional.isPresent()) {
             Benutzer eingeloggterBenutzer = eingeloggterBenutzerOptional.get();
-            Kryptonit neuesKryptonit = new Kryptonit(kryptonitRequestDTO.bezeichnung(),eingeloggterBenutzer);
+            Kryptonit neuesKryptonit = new Kryptonit(kryptonitRequestDTO.bezeichnung(), eingeloggterBenutzer);
 
             List<Kryptonit> kryptoniteDesBenutzers = eingeloggterBenutzer.getKryptonite();
-            if(kryptoniteDesBenutzers.stream().anyMatch(k -> k.getBezeichnung().equalsIgnoreCase(neuesKryptonit.getBezeichnung()))){
+            if (kryptoniteDesBenutzers.stream().anyMatch(k -> k.getBezeichnung().equalsIgnoreCase(neuesKryptonit.getBezeichnung()))) {
                 return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(Collections.singletonList("Kryptonit existiert bereits in der Liste"));
             }
 
@@ -55,19 +56,21 @@ public class KryptonitController {
     }
 
     @DeleteMapping("/kryptonit/{kryptonitId}")
-        public ResponseEntity<?> loescheKryptonit(@PathVariable Long kryptonitId, @ModelAttribute("eingeloggterBenutzer") Optional<Benutzer> eingeloggterBenutzerOptional) {
+    public ResponseEntity<?> loescheKryptonit(@PathVariable Long kryptonitId, @ModelAttribute("eingeloggterBenutzer") Optional<Benutzer> eingeloggterBenutzerOptional) {
         if (eingeloggterBenutzerOptional.isPresent()) {
             Benutzer eingeloggterBenutzer = eingeloggterBenutzerOptional.get();
             //Die Liste der Kryptonite des Benutzers abrufen
             List<Kryptonit> kryponiteDesBenutzers = eingeloggterBenutzer.getKryptonite();
 
             //Nach dem Kryptonit mit der gegebenen ID suchen und es aus der Liste entfernen
-            kryponiteDesBenutzers.removeIf(kryptonit -> kryptonit.getKryptonitId().equals(kryptonitId));
+            boolean gefunden = kryponiteDesBenutzers.removeIf(kryptonit -> kryptonit.getKryptonitId().equals(kryptonitId));
 
-            //den aktualisierten Benutzer speichen, um die Änderungen zu persistieren
-            benutzerRepository.save(eingeloggterBenutzer);
-
-            return ResponseEntity.ok(eingeloggterBenutzer.getKryptonite());
+            if (gefunden) {
+                benutzerRepository.save(eingeloggterBenutzer);
+                return ResponseEntity.ok(eingeloggterBenutzer.getKryptonite());
+            } else {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body(Collections.singletonList("Eintrag existiert nicht"));
+            }
         } else {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(Collections.singletonList("Login erforderlich"));
         }
