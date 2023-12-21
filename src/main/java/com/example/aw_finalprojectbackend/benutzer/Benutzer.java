@@ -101,6 +101,7 @@ public class Benutzer {
     public List<Kryptonit> getKryptonite() {
         return kryptonite;
     }
+
     public void setKryptonite(List<Kryptonit> kryptonite) {
         this.kryptonite = kryptonite;
     }
