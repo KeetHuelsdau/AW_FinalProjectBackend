@@ -27,9 +27,9 @@ public class Stimmung {
     @JsonIgnore
     private Benutzer benutzer;
 
-    public Stimmung(String stimmungName, Benutzer benutzer,Long id, int rating, LocalDateTime erstellungszeit, String kommentar) {
-        this.benutzer = benutzer;
+    public Stimmung(String stimmungName, Benutzer benutzer, int rating, LocalDateTime erstellungszeit, String kommentar) {
         this.stimmungName = stimmungName;
+        this.benutzer = benutzer;
         this.rating = rating;
         this.erstellungszeit = erstellungszeit;
         this.kommentar = kommentar;
@@ -37,6 +37,8 @@ public class Stimmung {
 
     public Stimmung() {
     }
+
+
 
     public String getStimmungName() {
         return stimmungName;
