@@ -83,12 +83,5 @@ public class KryptonitController {
         benutzerRepository.save(eingeloggterBenutzer);
         return kryponiteDesBenutzers;
     }
-
-
-    // TODO : @PutMapping("/kryptonit/{kryptonitId}")
-/*    public Kryptonit aktualisiereKryptonitWert(@PathVariable Long id, @RequestParam int neuerKryptonitWert, @ModelAttribute("eingeloggterBenutzer") Optional<Benutzer> eingeloggterBenutzerOptional) {
-        Benutzer eingeloggterBenutzer = eingeloggterBenutzerOptional
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Login erforderlich"));*/
-
-}
+aktu}
 
