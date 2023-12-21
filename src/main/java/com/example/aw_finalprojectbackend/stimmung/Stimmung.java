@@ -30,7 +30,6 @@ public class Stimmung {
     public Stimmung(String stimmungName, Benutzer benutzer,Long id, int rating, LocalDateTime erstellungszeit, String kommentar) {
         this.benutzer = benutzer;
         this.stimmungName = stimmungName;
-        this.stimmungId = id;
         this.rating = rating;
         this.erstellungszeit = erstellungszeit;
         this.kommentar = kommentar;
