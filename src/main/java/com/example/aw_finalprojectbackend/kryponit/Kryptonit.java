@@ -27,15 +27,9 @@ public class Kryptonit {
         this.haeufigkeit = 0;
         this.benutzer = benutzer;
     }
-
-    public void setKryptonitId(Long kryptonitId) {
-        this.kryptonitId = kryptonitId;
-    }
-
     public Long getKryptonitId() {
         return kryptonitId;
     }
-
     public String getBezeichnung() {
         return bezeichnung;
     }
