@@ -5,6 +5,7 @@ import com.example.aw_finalprojectbackend.kryponit.kryptonitEintraege.KryptonitE
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -27,6 +28,7 @@ public class Kryptonit {
     public Kryptonit(String bezeichnung, Benutzer benutzer) {
         this.bezeichnung = bezeichnung;
         this.benutzer = benutzer;
+        this.taeglicheEintraege = new ArrayList<>();
     }
     public Long getKryptonitId() {
         return kryptonitId;

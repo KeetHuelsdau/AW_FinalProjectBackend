@@ -2,12 +2,13 @@ package com.example.aw_finalprojectbackend.kryponit;
 
 import com.example.aw_finalprojectbackend.benutzer.Benutzer;
 import com.example.aw_finalprojectbackend.benutzer.BenutzerRepository;
-import com.example.aw_finalprojectbackend.benutzer.Benutzer;
+import com.example.aw_finalprojectbackend.kryponit.kryptonitEintraege.KryptonitEintrag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
@@ -65,7 +66,7 @@ public class KryptonitController {
     }
 
     @PutMapping("kryptonit/{kryptonitId}")
-    public List<Kryptonit> veraendereKryptonitHaeufigkeit(@PathVariable Long kryptonitId, @RequestBody KryptonitVeraendertRequestDTO kryptonitVeraendertRequestDTO, @ModelAttribute("eingeloggterBenutzer") Optional<Benutzer> eingeloggterBenutzerOptional) {
+    public List<Kryptonit> veraendereKryptonitBezeichnung(@PathVariable Long kryptonitId, @RequestBody KryptonitVeraendertRequestDTO kryptonitVeraendertRequestDTO, @ModelAttribute("eingeloggterBenutzer") Optional<Benutzer> eingeloggterBenutzerOptional) {
         Benutzer eingeloggterBenutzer = eingeloggterBenutzerOptional
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Login erforderlich"));
 
