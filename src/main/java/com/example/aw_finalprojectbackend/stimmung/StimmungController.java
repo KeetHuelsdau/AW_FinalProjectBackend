@@ -11,7 +11,6 @@ import java.util.List;
 import java.util.Optional;
 
 @RestController
-@RequestMapping("/stimmung")
 public class StimmungController {
 
     @Autowired
@@ -22,8 +21,8 @@ public class StimmungController {
         this.stimmungService = stimmungService;
     }
 
-    @GetMapping()
-    public ResponseEntity<List<Stimmung>> getStimmungen(
+    @GetMapping("/stimmungen")
+    public ResponseEntity<List<Stimmung>> erhalteAlleStimmungen(
                                                         @ModelAttribute("eingeloggterBenutzer") Optional<Benutzer> eingeloggterBenutzerOptional) {
         Benutzer eingeloggterBenutzer = eingeloggterBenutzerOptional
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Login erforderlich"));
@@ -32,9 +31,9 @@ public class StimmungController {
         return ResponseEntity.ok(stimmungs);
     }
 
-    @PostMapping()
-    public ResponseEntity<String> createStimmung(@RequestBody StimmungRequestDTO stimmungDTO,
-                                                 @ModelAttribute("eingeloggterBenutzer") Optional<Benutzer> eingeloggterBenutzerOptional) {
+    @PostMapping("/stimmung")
+    public ResponseEntity<String> erstelleStimmung(@RequestBody StimmungRequestDTO stimmungDTO,
+                                                   @ModelAttribute("eingeloggterBenutzer") Optional<Benutzer> eingeloggterBenutzerOptional) {
 
         Benutzer eingeloggterBenutzer = eingeloggterBenutzerOptional
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Login erforderlich"));
@@ -47,9 +46,9 @@ public class StimmungController {
         }
     }
 
-    @PutMapping("/{stimmungId}")
-    public ResponseEntity<String> editStimmung(@PathVariable Long stimmungId, StimmungResponseDTO stimmungDTO,
-                                               @ModelAttribute("eingeloggterBenutzer") Optional<Benutzer> eingeloggterBenutzerOptional) {
+    @PutMapping("/stimmung/{stimmungId}")
+    public ResponseEntity<String> editiereStimmung(@PathVariable Long stimmungId, StimmungResponseDTO stimmungDTO,
+                                                   @ModelAttribute("eingeloggterBenutzer") Optional<Benutzer> eingeloggterBenutzerOptional) {
         Benutzer eingeloggterBenutzer = eingeloggterBenutzerOptional
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Login erforderlich"));
 
@@ -62,9 +61,9 @@ public class StimmungController {
 
     }
 
-    @DeleteMapping("/{stimmungId}")
-    public ResponseEntity<String> deleteStimmung(@PathVariable Long stimmungId,
-                                                 @ModelAttribute("eingeloggterBenutzer") Optional<Benutzer> eingeloggterBenutzerOptional) {
+    @DeleteMapping("/stimmung/{stimmungId}")
+    public ResponseEntity<String> loescheStimmung(@PathVariable Long stimmungId,
+                                                  @ModelAttribute("eingeloggterBenutzer") Optional<Benutzer> eingeloggterBenutzerOptional) {
         Benutzer eingeloggterBenutzer = eingeloggterBenutzerOptional
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Login erforderlich"));
 
