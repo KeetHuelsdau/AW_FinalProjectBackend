@@ -24,7 +24,7 @@ public class StimmungController {
     }
 
     @PostMapping()
-    public ResponseEntity<String> createStimmung(@PathVariable String username, @RequestBody Stimmung newStimmung,
+    public ResponseEntity<String> createStimmung(@PathVariable String username, @RequestBody Stimmung newStimmung, //StimmungsRequestDTO //Pfadvariablen raus, User kommt über Cookies
                                                  @ModelAttribute("eingeloggterBenutzer") Optional<Benutzer> eingeloggterBenutzerOptional) {
 
         Benutzer eingeloggterBenutzer = eingeloggterBenutzerOptional
@@ -38,7 +38,7 @@ public class StimmungController {
     }
 
     @PutMapping("/{stimmungId}")
-    public ResponseEntity<String> editStimmung(@PathVariable Long stimmungId, @PathVariable String username, Stimmung newStimmung,
+    public ResponseEntity<String> editStimmung(@PathVariable Long stimmungId, @PathVariable String username, Stimmung newStimmung, //Pfadvariablen raus, User kommt über Cookies
                                                @ModelAttribute("eingeloggterBenutzer") Optional<Benutzer> eingeloggterBenutzerOptional) {
         Benutzer eingeloggterBenutzer = eingeloggterBenutzerOptional
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Login erforderlich"));

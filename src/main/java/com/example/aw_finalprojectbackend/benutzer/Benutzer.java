@@ -98,9 +98,14 @@ public class Benutzer {
     public void setStimmungen(List<Stimmung> stimmungen) {
         this.stimmungen = stimmungen;
     }
+<<<<<<<<< Temporary merge branch 1
+=========
+
+>>>>>>>>> Temporary merge branch 2
     public List<Kryptonit> getKryptonite() {
         return kryptonite;
     }
+
     public void setKryptonite(List<Kryptonit> kryptonite) {
         this.kryptonite = kryptonite;
     }
