@@ -6,7 +6,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.server.ResponseStatusException;
 
 import java.util.Collections;
 import java.util.List;
@@ -15,11 +14,10 @@ import java.util.Optional;
 @RestController
 public class StimmungController {
 
-
-    private final  StimmungService stimmungService;
+    private StimmungServices stimmungService;
 
     @Autowired
-    public StimmungController(StimmungService stimmungService){
+    public StimmungController(StimmungServices stimmungService) {
         this.stimmungService = stimmungService;
     }
 
@@ -47,7 +45,6 @@ public class StimmungController {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(Collections.singletonList("Login erforderlich"));
         }
     }
-
 
     @PutMapping("/stimmung/{stimmungId}")
     public ResponseEntity<List<?>> editiereStimmung(@PathVariable Long stimmungId, @RequestBody StimmungRequestDTO stimmungRequestDTO,
@@ -81,5 +78,4 @@ public class StimmungController {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(Collections.singletonList("Login erforderlich"));
         }
     }
-
 }

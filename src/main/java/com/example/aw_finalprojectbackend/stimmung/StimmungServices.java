@@ -6,14 +6,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
-
 @Service
-public class StimmungService {
+public class StimmungServices {
 
     private final BenutzerRepository benutzerRepository;
 
     @Autowired
-    public StimmungService(BenutzerRepository benutzerRepository) {
+    public StimmungServices(BenutzerRepository benutzerRepository) {
         this.benutzerRepository = benutzerRepository;
     }
 
