@@ -1,14 +1,18 @@
 package com.example.aw_finalprojectbackend.kryponit;
 
+import com.example.aw_finalprojectbackend.ListenSammlung;
 import com.example.aw_finalprojectbackend.benutzer.Benutzer;
 import com.example.aw_finalprojectbackend.benutzer.BenutzerRepository;
 import com.example.aw_finalprojectbackend.kryponit.kryptonitEintraege.KryptonitEintrag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.time.LocalDate;
+import java.util.Collections;
 import java.util.Collections;
 import java.time.LocalDate;
 import java.util.List;
@@ -25,10 +29,10 @@ public class KryptonitController {
     }
 
     @GetMapping("/kryptonite")
-    public ResponseEntity<List<?>> erhalteAlleKryptonite(@ModelAttribute("eingeloggterBenutzer") Optional<Benutzer> eingeloggterBenutzerOptional) {
+    public ResponseEntity<?> erhalteAlleKryptonite(@ModelAttribute("eingeloggterBenutzer") Optional<Benutzer> eingeloggterBenutzerOptional) {
         if (eingeloggterBenutzerOptional.isPresent()) {
             Benutzer eingeloggterBenutzer = eingeloggterBenutzerOptional.get();
-            return ResponseEntity.ok(eingeloggterBenutzer.getKryptonite());
+            return ResponseEntity.ok(new ListenSammlung(eingeloggterBenutzer.getKryptonite()));
         } else {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(Collections.singletonList("Login erforderlich"));
         }
@@ -98,4 +102,3 @@ public class KryptonitController {
         }
     }
 }
-

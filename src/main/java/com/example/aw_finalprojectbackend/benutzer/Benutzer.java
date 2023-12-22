@@ -25,7 +25,7 @@ public class Benutzer {
     String nachname;
     String geschlecht;
 
-    @OneToMany(mappedBy = "benutzer", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "benutzer", cascade = CascadeType.ALL, orphanRemoval = true)
     List<Stimmung> stimmungen;
     @OneToMany(mappedBy = "benutzer", cascade = CascadeType.ALL, orphanRemoval = true)
     List <Kryptonit> kryptonite;

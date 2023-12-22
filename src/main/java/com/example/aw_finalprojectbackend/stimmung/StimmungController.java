@@ -1,12 +1,16 @@
 package com.example.aw_finalprojectbackend.stimmung;
 
+import com.example.aw_finalprojectbackend.ListenSammlung;
 import com.example.aw_finalprojectbackend.benutzer.Benutzer;
+import com.example.aw_finalprojectbackend.benutzer.Benutzer;
+import com.example.aw_finalprojectbackend.benutzer.BenutzerRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
@@ -22,56 +26,54 @@ public class StimmungController {
     }
 
     @GetMapping("/stimmungen")
-    public ResponseEntity<List<Stimmung>> erhalteAlleStimmungen(
-                                                        @ModelAttribute("eingeloggterBenutzer") Optional<Benutzer> eingeloggterBenutzerOptional) {
-        Benutzer eingeloggterBenutzer = eingeloggterBenutzerOptional
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Login erforderlich"));
+    public ResponseEntity<?> erhalteAlleStimmungen(
+            @ModelAttribute("eingeloggterBenutzer") Optional<Benutzer> eingeloggterBenutzerOptional) {
+        if (eingeloggterBenutzerOptional.isPresent()) {
+            Benutzer eingeloggterBenutzer = eingeloggterBenutzerOptional.get();
+            return ResponseEntity.ok(new ListenSammlung(eingeloggterBenutzer.getStimmungen()));
 
-        List<Stimmung> stimmungs = stimmungService.getStimmungen(eingeloggterBenutzer.getBenutzerName());
-        return ResponseEntity.ok(stimmungs);
-    }
-
-    @PostMapping("/stimmung")
-    public ResponseEntity<String> erstelleStimmung(@RequestBody StimmungRequestDTO stimmungDTO,
-                                                   @ModelAttribute("eingeloggterBenutzer") Optional<Benutzer> eingeloggterBenutzerOptional) {
-
-        Benutzer eingeloggterBenutzer = eingeloggterBenutzerOptional
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Login erforderlich"));
-
-        boolean created = stimmungService.createStimmung(eingeloggterBenutzer.getBenutzerName(), stimmungDTO);
-        if (created) {
-            return ResponseEntity.status(HttpStatus.CREATED).body("Stimmung erfolgreich erstellt");
         } else {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Benutzer nicht gefunden");
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(Collections.singletonList("Login erforderlich"));
         }
     }
 
+    @PostMapping("/stimmung")
+    public ResponseEntity<?> erstelleStimmung(@RequestBody StimmungRequestDTO stimmungDTO,
+                                                                @ModelAttribute("eingeloggterBenutzer") Optional<Benutzer> eingeloggterBenutzerOptional) {
+        Benutzer eingeloggterBenutzer = eingeloggterBenutzerOptional
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Login erforderlich"));
+        Stimmung neueStimmung = stimmungService.erstelleStimmung(eingeloggterBenutzer, stimmungDTO);
+        return ResponseEntity.status(HttpStatus.CREATED)
+                .body(new StimmungResponseDTO(neueStimmung, "Stimmung erfolgreich erstellt"));
+    }
+
     @PutMapping("/stimmung/{stimmungId}")
-    public ResponseEntity<String> editiereStimmung(@PathVariable Long stimmungId, StimmungResponseDTO stimmungDTO,
-                                                   @ModelAttribute("eingeloggterBenutzer") Optional<Benutzer> eingeloggterBenutzerOptional) {
+    public ResponseEntity<List<?>> editiereStimmung(@PathVariable Long stimmungId, StimmungRequestDTO stimmungDTO,
+                                                         @ModelAttribute("eingeloggterBenutzer") Optional<Benutzer> eingeloggterBenutzerOptional) {
         Benutzer eingeloggterBenutzer = eingeloggterBenutzerOptional
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Login erforderlich"));
 
-        boolean edit = stimmungService.editStimmung(eingeloggterBenutzer.getBenutzerName(), stimmungId, stimmungDTO);
-        if (edit) {
-            return ResponseEntity.status(HttpStatus.ACCEPTED).body("Stimmung geändert");
+        Stimmung neueStimmung = stimmungService.editiereStimmung(eingeloggterBenutzer, stimmungId, stimmungDTO);
+        if (neueStimmung != null) {
+            return ResponseEntity.status(HttpStatus.ACCEPTED).body(Collections.singletonList("Stimmung geändert"));
         } else {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Stimmung nicht gefunden");
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(Collections.singletonList("Stimmung nicht gefunden"));
         }
 
     }
 
     @DeleteMapping("/stimmung/{stimmungId}")
-    public ResponseEntity<String> loescheStimmung(@PathVariable Long stimmungId,
+    public ResponseEntity<?> loescheStimmung(@PathVariable Long stimmungId,
                                                   @ModelAttribute("eingeloggterBenutzer") Optional<Benutzer> eingeloggterBenutzerOptional) {
         Benutzer eingeloggterBenutzer = eingeloggterBenutzerOptional
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Login erforderlich"));
 
-        boolean deleted = stimmungService.deleteStimmung(stimmungId,eingeloggterBenutzer.getBenutzerName());
+        boolean deleted = stimmungService.loescheStimmung(stimmungId, eingeloggterBenutzer);
         if (deleted) {
-            return ResponseEntity.status(HttpStatus.ACCEPTED).body("Stimmung gelöscht");
+            return ResponseEntity.status(HttpStatus.ACCEPTED).body(Collections.singletonList("Stimmung gelöscht"));
         } else {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Stimmung nicht gefunden");
         }
     }
+
 }
