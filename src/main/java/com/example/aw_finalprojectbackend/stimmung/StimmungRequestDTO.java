@@ -1,4 +1,6 @@
 package com.example.aw_finalprojectbackend.stimmung;
 
-public record StimmungRequestDTO(int rating,String kommentar) {
+import java.util.Optional;
+
+public record StimmungRequestDTO(int rating, Optional <String> kommentar) {
 }

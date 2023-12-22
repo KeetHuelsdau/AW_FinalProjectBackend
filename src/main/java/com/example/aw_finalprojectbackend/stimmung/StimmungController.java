@@ -19,7 +19,7 @@ public class StimmungController {
     private final  StimmungService stimmungService;
 
     @Autowired
-    public StimmungController(StimmungService stimmungService) {
+    public StimmungController(StimmungService stimmungService){
         this.stimmungService = stimmungService;
     }
 
@@ -37,13 +37,17 @@ public class StimmungController {
 
     @PostMapping("/stimmung")
     public ResponseEntity<?> erstelleStimmung(@RequestBody StimmungRequestDTO stimmungDTO,
-                                                                @ModelAttribute("eingeloggterBenutzer") Optional<Benutzer> eingeloggterBenutzerOptional) {
-        Benutzer eingeloggterBenutzer = eingeloggterBenutzerOptional
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Login erforderlich"));
-        Stimmung neueStimmung = stimmungService.erstelleStimmung(eingeloggterBenutzer, stimmungDTO);
-        return ResponseEntity.status(HttpStatus.CREATED)
-                .body(new StimmungResponseDTO(neueStimmung, "Stimmung erfolgreich erstellt"));
+                                              @ModelAttribute("eingeloggterBenutzer") Optional<Benutzer> eingeloggterBenutzerOptional) {
+        if (eingeloggterBenutzerOptional.isPresent()) {
+            Benutzer eingeloggterBenutzer = eingeloggterBenutzerOptional.get();
+            Stimmung neueStimmung = stimmungService.erstelleStimmung(eingeloggterBenutzer, stimmungDTO);
+            return ResponseEntity.status(HttpStatus.CREATED)
+                    .body(new StimmungResponseDTO(neueStimmung, "Stimmung erfolgreich erstellt"));
+        } else {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(Collections.singletonList("Login erforderlich"));
+        }
     }
+
 
     @PutMapping("/stimmung/{stimmungId}")
     public ResponseEntity<List<?>> editiereStimmung(@PathVariable Long stimmungId, @RequestBody StimmungRequestDTO stimmungRequestDTO,
@@ -64,15 +68,18 @@ public class StimmungController {
 
     @DeleteMapping("/stimmung/{stimmungId}")
     public ResponseEntity<?> loescheStimmung(@PathVariable Long stimmungId,
-                                                  @ModelAttribute("eingeloggterBenutzer") Optional<Benutzer> eingeloggterBenutzerOptional) {
-        Benutzer eingeloggterBenutzer = eingeloggterBenutzerOptional
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Login erforderlich"));
-
-        boolean deleted = stimmungService.loescheStimmung(stimmungId, eingeloggterBenutzer);
-        if (deleted) {
-            return ResponseEntity.status(HttpStatus.ACCEPTED).body(Collections.singletonList("Stimmung gelöscht").toString());
+                                             @ModelAttribute("eingeloggterBenutzer") Optional<Benutzer> eingeloggterBenutzerOptional) {
+        if (eingeloggterBenutzerOptional.isPresent()) {
+            Benutzer eingeloggterBenutzer = eingeloggterBenutzerOptional.get();
+            boolean deleted = stimmungService.loescheStimmung(stimmungId, eingeloggterBenutzer);
+            if (deleted) {
+                return ResponseEntity.status(HttpStatus.ACCEPTED).body(Collections.singletonList("Stimmung gelöscht").toString());
+            } else {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Stimmung nicht gefunden");
+            }
         } else {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Stimmung nicht gefunden");
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(Collections.singletonList("Login erforderlich"));
         }
     }
+
 }

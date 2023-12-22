@@ -19,10 +19,10 @@ public class StimmungService {
 
 
     public Stimmung erstelleStimmung(Benutzer benutzer, StimmungRequestDTO stimmungRequestDTO) {
-        Stimmung stimmung = new Stimmung(benutzer, stimmungRequestDTO.rating(), stimmungRequestDTO.kommentar());
-        benutzer.getStimmungen().add(stimmung);
+        Stimmung neueStimmung = new Stimmung(benutzer, stimmungRequestDTO.rating(), stimmungRequestDTO.kommentar().orElse(null));
+        benutzer.getStimmungen().add(neueStimmung);
         benutzerRepository.save(benutzer);
-        return stimmung;
+        return neueStimmung;
     }
 
     public Stimmung editiereStimmung(Benutzer benutzer, Long stimmungId, StimmungRequestDTO stimmungRequestDTO) {
@@ -33,12 +33,12 @@ public class StimmungService {
         if (bearbeiteteStimmungOptional.isPresent()) {
             Stimmung bearbeiteteStimmung = bearbeiteteStimmungOptional.get();
             bearbeiteteStimmung.setRating(stimmungRequestDTO.rating());
-            bearbeiteteStimmung.setKommentar(stimmungRequestDTO.kommentar());
+            bearbeiteteStimmung.setKommentar(stimmungRequestDTO.kommentar().orElse(null));
             benutzerRepository.save(benutzer);
             return bearbeiteteStimmung;
         }
 
-        Stimmung neueStimmung = new Stimmung(benutzer, stimmungRequestDTO.rating(), stimmungRequestDTO.kommentar());
+        Stimmung neueStimmung = new Stimmung(benutzer, stimmungRequestDTO.rating(), stimmungRequestDTO.kommentar().orElse(null));
         benutzer.getStimmungen().add(neueStimmung);
         benutzerRepository.save(benutzer);
         return neueStimmung;
@@ -46,10 +46,13 @@ public class StimmungService {
 
     public boolean loescheStimmung(Long stimmungId, Benutzer benutzer) {
         if (benutzer != null) {
-            benutzer.getStimmungen().removeIf(s -> s.getStimmungId().equals(stimmungId));
-            benutzerRepository.save(benutzer);
-            return true;
+            boolean removed = benutzer.getStimmungen().removeIf(s -> s.getStimmungId().equals(stimmungId));
+            if (removed) {
+                benutzerRepository.save(benutzer);
+                return true;
+            }
         }
         return false;
     }
+
 }
