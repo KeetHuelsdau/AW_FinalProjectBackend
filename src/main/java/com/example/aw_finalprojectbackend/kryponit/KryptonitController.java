@@ -68,12 +68,11 @@ public class KryptonitController {
 
             //Nach dem Kryptonit mit der gegebenen ID suchen und es aus der Liste entfernen
             boolean gefunden = kryponiteDesBenutzers.removeIf(kryptonit -> kryptonit.getKryptonitId().equals(kryptonitId));
-
             if (gefunden) {
                 benutzerRepository.save(eingeloggterBenutzer);
                 return ResponseEntity.ok(eingeloggterBenutzer.getKryptonite());
             } else {
-                return ResponseEntity.status(HttpStatus.NOT_FOUND).body(Collections.singletonList("Eintrag existiert nicht"));
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body(Collections.singletonList("Kryptonit existiert nicht"));
             }
         } else {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(Collections.singletonList("Login erforderlich"));

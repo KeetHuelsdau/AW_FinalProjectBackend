@@ -33,9 +33,10 @@ Content-Type:application/json
 POST http://localhost:8080/stimmung
 Content-Type:application/json
 
-{"stimmungName":"abc",
-"rating":"abc",
-"kommentar":"Was für ein toller Tag"}
+{
+  "rating":3,
+  "kommentar":"Was für ein toller Tag"
+}
 
 ###
 
@@ -44,9 +45,21 @@ Content-Type:application/json
 GET http://localhost:8080/kryptonite
 Content-Type:application/json
 
+### Erstelle Kryptonit
+POST http://localhost:8080//kryptonit
+Content-Type:application/json
+
+{
+  "bezeichnung":"Nudeln"
+}
+
+### Lösche Kryptonit
+DELETE http://localhost:8080/kryptonit/1
+Content-Type:application/json
+
 
 ### Ändere Kryptonitbezeichnung
-PUT http://localhost:8080/kryptonit/3
+PUT http://localhost:8080/kryptonit/10
 Content-Type:application/json
 
 {
@@ -61,3 +74,26 @@ Content-Type:application/json
 {
   "haeufigkeit": 4
 }
+
+###
+//-------------------------------------------------BalsamEndpunkte---------------------------------------------------
+
+### Alle Balsame holen
+GET http://localhost:8080/balsame
+Content-Type:application/json
+
+### Erstelle Balsam
+POST http://localhost:8080//balsam
+Content-Type:application/json
+
+{
+  "bezeichnung":"Freunde"
+}
+
+### Lösche Balsam
+DELETE http://localhost:8080/balsam/1
+Content-Type:application/json
+
+### Erstelle Balsameintrag
+POST http://localhost:8080//balsam/1/eintrag
+Content-Type:application/json

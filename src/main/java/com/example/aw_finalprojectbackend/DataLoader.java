@@ -38,8 +38,8 @@ public class DataLoader implements ApplicationRunner {
         moritzrose.getKryptonite().get(0).getTaeglicheEintraege().add(new KryptonitEintrag(3,schokolade));
         moritzrose.getKryptonite().get(1).getTaeglicheEintraege().add(new KryptonitEintrag(5,kaffee));
 
-        moritzrose.getStimmungen().add( new Stimmung("Glücklich", moritzrose, 5, LocalDateTime.now(), "Glücklich!"));
-        moritzrose.getStimmungen().add(new Stimmung("Traurig", moritzrose, 3, LocalDateTime.now(), "Traurig!"));
+        moritzrose.getStimmungen().add( new Stimmung(moritzrose, 5, "Glücklich!"));
+        moritzrose.getStimmungen().add(new Stimmung(moritzrose, 3, "Traurig!"));
 
         benutzerRepository.save(moritzrose);
 
@@ -50,7 +50,7 @@ public class DataLoader implements ApplicationRunner {
         igorgrab.getKryptonite().add(new Kryptonit("Kaffee", igorgrab));
         igorgrab.getKryptonite().add(new Kryptonit("Gaming", igorgrab));
 
-        igorgrab.getStimmungen().add(new Stimmung("ok", igorgrab, 3, LocalDateTime.now(), "Alles ok!"));
+        igorgrab.getStimmungen().add(new Stimmung(igorgrab, 3, "Alles ok!"));
         benutzerRepository.save(igorgrab);
 
 
@@ -62,7 +62,7 @@ public class DataLoader implements ApplicationRunner {
         keethuelsdau.getKryptonite().add(haribo);
         keethuelsdau.getKryptonite().add(prokrastination);
 
-        keethuelsdau.getStimmungen().add(new Stimmung("solala", keethuelsdau, 4, LocalDateTime.now(), "Solala!"));
+        keethuelsdau.getStimmungen().add(new Stimmung(keethuelsdau, 4,"Solala!"));
         benutzerRepository.save(keethuelsdau);
     }
 }
