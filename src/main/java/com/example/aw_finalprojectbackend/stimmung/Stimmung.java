@@ -21,7 +21,7 @@ public class Stimmung {
 
     private LocalDateTime erstellungszeit;
 
-    @Size(min = 5, max = 255)
+    @Size(min = 0, max = 255)
     private String kommentar;
 
     @ManyToOne

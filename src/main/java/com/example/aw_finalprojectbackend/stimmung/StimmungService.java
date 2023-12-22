@@ -7,12 +7,12 @@ import org.springframework.stereotype.Service;
 
 import java.util.Optional;
 @Service
-public class StimmungServices {
+public class StimmungService {
 
     private final BenutzerRepository benutzerRepository;
 
     @Autowired
-    public StimmungServices(BenutzerRepository benutzerRepository) {
+    public StimmungService(BenutzerRepository benutzerRepository) {
         this.benutzerRepository = benutzerRepository;
     }
 

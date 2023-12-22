@@ -14,10 +14,10 @@ import java.util.Optional;
 @RestController
 public class StimmungController {
 
-    private StimmungServices stimmungService;
+    private final StimmungService stimmungService;
 
     @Autowired
-    public StimmungController(StimmungServices stimmungService) {
+    public StimmungController(StimmungService stimmungService) {
         this.stimmungService = stimmungService;
     }
 
