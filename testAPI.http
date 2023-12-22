@@ -1,6 +1,6 @@
 //-------------------------------------------------BenutzerEndpunkte---------------------------------------------------
 
-### Login user
+###Login user moritzrose
 POST http://localhost:8080/einloggen
 Content-Type:application/json
 
@@ -9,7 +9,28 @@ Content-Type:application/json
   "passwort": "moritzrose"
 }
 
-### Logout user
+
+###Login user igorgrab
+POST http://localhost:8080/einloggen
+Content-Type:application/json
+
+{
+"benutzerName": "igorgrab",
+"passwort": "igorgrab"
+}
+
+
+###Login user keethuelsdau
+POST http://localhost:8080/einloggen
+Content-Type:application/json
+
+{
+  "benutzerName": "keethuelsdau",
+  "passwort": "keethuelsdau"
+}
+
+
+###Logout user
 POST http://localhost:8080/ausloggen
 Content-Type:application/json
 
@@ -26,24 +47,29 @@ Content-Type:application/json
 }
 ###
 //-------------------------------------------------StimmungenEndpunkte---------------------------------------------------
+###erhalte alle Stimmungen
 GET http://localhost:8080/stimmungen
 Content-Type:application/json
 
-###
+
+###erstelle eine Stimmung
 POST http://localhost:8080/stimmung
 Content-Type:application/json
 
 {
-  "rating":3,
+  "rating":6,
   "kommentar":"Was für ein toller Tag"
 }
 
+
 ###
+
 
 //-------------------------------------------------KryptonitEndpunkte---------------------------------------------------
 ### Alle Kryptonite holen
 GET http://localhost:8080/kryptonite
 Content-Type:application/json
+
 
 ### Erstelle Kryptonit
 POST http://localhost:8080//kryptonit
@@ -53,8 +79,19 @@ Content-Type:application/json
   "bezeichnung":"Nudeln"
 }
 
-### Lösche Kryptonit
+
+### Lösche Kryptonit vom Benutzer moritzrose
 DELETE http://localhost:8080/kryptonit/1
+Content-Type:application/json
+
+
+### Lösche Kryptonit vom Benutzer igorgrab
+DELETE http://localhost:8080/kryptonit/5
+Content-Type:application/json
+
+
+### Lösche Kryptonit vom Benutzer keethuelsdau
+DELETE http://localhost:8080/kryptonit/8
 Content-Type:application/json
 
 
@@ -66,14 +103,34 @@ Content-Type:application/json
   "veraenderterName": "NichtZocken!"
 }
 
-### Füge neuen Kryptoniteintrag hinzu
 
+### Füge neuen Kryptoniteintrag hinzu
+###moritzrose
 POST http://localhost:8080//kryptonit/1/eintrag
 Content-Type:application/json
 
 {
   "haeufigkeit": 4
 }
+
+
+###igorgrab
+POST http://localhost:8080//kryptonit/5/eintrag
+Content-Type:application/json
+
+{
+  "haeufigkeit": 3
+}
+
+
+###keethuelsdau
+POST http://localhost:8080//kryptonit/7/eintrag
+Content-Type:application/json
+
+{
+  "haeufigkeit": 5
+}
+
 
 ###
 //-------------------------------------------------BalsamEndpunkte---------------------------------------------------
