@@ -2,8 +2,6 @@ package com.example.aw_finalprojectbackend.stimmung;
 
 import com.example.aw_finalprojectbackend.ListenSammlung;
 import com.example.aw_finalprojectbackend.benutzer.Benutzer;
-import com.example.aw_finalprojectbackend.benutzer.Benutzer;
-import com.example.aw_finalprojectbackend.benutzer.BenutzerRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -17,8 +15,8 @@ import java.util.Optional;
 @RestController
 public class StimmungController {
 
-    @Autowired
-    private StimmungService stimmungService;
+
+    private final  StimmungService stimmungService;
 
     @Autowired
     public StimmungController(StimmungService stimmungService) {
@@ -48,18 +46,20 @@ public class StimmungController {
     }
 
     @PutMapping("/stimmung/{stimmungId}")
-    public ResponseEntity<List<?>> editiereStimmung(@PathVariable Long stimmungId, StimmungRequestDTO stimmungDTO,
-                                                         @ModelAttribute("eingeloggterBenutzer") Optional<Benutzer> eingeloggterBenutzerOptional) {
-        Benutzer eingeloggterBenutzer = eingeloggterBenutzerOptional
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Login erforderlich"));
+    public ResponseEntity<List<?>> editiereStimmung(@PathVariable Long stimmungId, @RequestBody StimmungRequestDTO stimmungRequestDTO,
+                                                    @ModelAttribute("eingeloggterBenutzer") Optional<Benutzer> eingeloggterBenutzerOptional) {
+        if (eingeloggterBenutzerOptional.isPresent()) {
+            Benutzer eingeloggterBenutzer = eingeloggterBenutzerOptional.get();
+            Stimmung bearbeiteteStimmung = stimmungService.editiereStimmung(eingeloggterBenutzer, stimmungId, stimmungRequestDTO);
 
-        Stimmung neueStimmung = stimmungService.editiereStimmung(eingeloggterBenutzer, stimmungId, stimmungDTO);
-        if (neueStimmung != null) {
-            return ResponseEntity.status(HttpStatus.ACCEPTED).body(Collections.singletonList("Stimmung geändert"));
+            if (bearbeiteteStimmung != null) {
+                return ResponseEntity.status(HttpStatus.ACCEPTED).body(Collections.singletonList("Stimmung geändert"));
+            } else {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body(Collections.singletonList("Stimmung nicht gefunden"));
+            }
         } else {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(Collections.singletonList("Stimmung nicht gefunden"));
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(Collections.singletonList("Login erforderlich"));
         }
-
     }
 
     @DeleteMapping("/stimmung/{stimmungId}")
@@ -70,10 +70,9 @@ public class StimmungController {
 
         boolean deleted = stimmungService.loescheStimmung(stimmungId, eingeloggterBenutzer);
         if (deleted) {
-            return ResponseEntity.status(HttpStatus.ACCEPTED).body(Collections.singletonList("Stimmung gelöscht"));
+            return ResponseEntity.status(HttpStatus.ACCEPTED).body(Collections.singletonList("Stimmung gelöscht").toString());
         } else {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Stimmung nicht gefunden");
         }
     }
-
 }

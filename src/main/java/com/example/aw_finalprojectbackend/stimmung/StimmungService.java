@@ -5,8 +5,6 @@ import com.example.aw_finalprojectbackend.benutzer.BenutzerRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.Collections;
-import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -19,13 +17,6 @@ public class StimmungService {
         this.benutzerRepository = benutzerRepository;
     }
 
-    public List<Stimmung> erhalteAlleStimmungen(Benutzer benutzer) {
-        if (benutzer != null) {
-            return benutzer.getStimmungen();
-        } else {
-            return Collections.emptyList();
-        }
-    }
 
     public Stimmung erstelleStimmung(Benutzer benutzer, StimmungRequestDTO stimmungRequestDTO) {
         Stimmung stimmung = new Stimmung(benutzer, stimmungRequestDTO.rating(), stimmungRequestDTO.kommentar());
@@ -35,20 +26,23 @@ public class StimmungService {
     }
 
     public Stimmung editiereStimmung(Benutzer benutzer, Long stimmungId, StimmungRequestDTO stimmungRequestDTO) {
-        for (Stimmung stimmung : benutzer.getStimmungen()) {
-            if (stimmung.getStimmungId().equals(stimmungId)) {
-                stimmung.setRating(stimmungRequestDTO.rating());
-                stimmung.setKommentar(stimmungRequestDTO.kommentar());
-                benutzerRepository.save(benutzer);
-                return stimmung;
-            }
+        Optional<Stimmung> bearbeiteteStimmungOptional = benutzer.getStimmungen().stream()
+                .filter(stimmung -> stimmung.getStimmungId().equals(stimmungId))
+                .findFirst();
+
+        if (bearbeiteteStimmungOptional.isPresent()) {
+            Stimmung bearbeiteteStimmung = bearbeiteteStimmungOptional.get();
+            bearbeiteteStimmung.setRating(stimmungRequestDTO.rating());
+            bearbeiteteStimmung.setKommentar(stimmungRequestDTO.kommentar());
+            benutzerRepository.save(benutzer);
+            return bearbeiteteStimmung;
         }
+
         Stimmung neueStimmung = new Stimmung(benutzer, stimmungRequestDTO.rating(), stimmungRequestDTO.kommentar());
         benutzer.getStimmungen().add(neueStimmung);
         benutzerRepository.save(benutzer);
         return neueStimmung;
     }
-
 
     public boolean loescheStimmung(Long stimmungId, Benutzer benutzer) {
         if (benutzer != null) {
