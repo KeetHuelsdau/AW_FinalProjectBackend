@@ -16,7 +16,7 @@ import java.util.Collections;
 import java.util.Optional;
 
 @RestController
-@CrossOrigin(origins = "http://localhost:3000", allowCredentials = "true")
+@CrossOrigin(origins = "http://localhost:3000", allowCredentials = "true", allowedHeaders = "*", methods = {RequestMethod.POST, RequestMethod.DELETE, RequestMethod.GET, RequestMethod.PUT})
 public class BenutzerController {
     private final BenutzerRepository benutzerRepository;
     private final SitzungRepository sitzungRepository;

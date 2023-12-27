@@ -34,8 +34,8 @@ POST http://localhost:8080/stimmung
 Content-Type:application/json
 
 {
-  "rating":2,
-  "kommentar":"Viel zu viel gegessen, bin müde..."
+  "rating":4,
+  "kommentar":"Endlich dieses blöde Problem mit 'Too_Early' gelöst!!!"
 }
 
 ###
@@ -50,7 +50,7 @@ GET http://localhost:8080/kryptonite
 Content-Type:application/json
 
 ### Erstelle Kryptonit
-POST http://localhost:8080//kryptonit
+POST http://localhost:8080/kryptonit
 Content-Type:application/json
 
 {
@@ -72,11 +72,11 @@ Content-Type:application/json
 
 ### Füge neuen Kryptoniteintrag hinzu
 
-POST http://localhost:8080//kryptonit/1/eintrag
+POST http://localhost:8080/kryptonitEintrag/1
 Content-Type:application/json
 
 {
-  "haeufigkeit": 5
+  "haeufigkeit": 4
 }
 
 ###
@@ -87,7 +87,7 @@ GET http://localhost:8080/balsame
 Content-Type:application/json
 
 ### Erstelle Balsam
-POST http://localhost:8080//balsam
+POST http://localhost:8080/balsam
 Content-Type:application/json
 
 {
@@ -99,5 +99,5 @@ DELETE http://localhost:8080/balsam/1
 Content-Type:application/json
 
 ### Erstelle Balsameintrag
-POST http://localhost:8080//balsam/1/eintrag
+POST http://localhost:8080/balsamEintrag/1
 Content-Type:application/json

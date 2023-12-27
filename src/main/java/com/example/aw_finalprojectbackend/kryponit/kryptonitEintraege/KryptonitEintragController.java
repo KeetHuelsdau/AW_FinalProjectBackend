@@ -5,6 +5,7 @@ import com.example.aw_finalprojectbackend.benutzer.BenutzerRepository;
 import com.example.aw_finalprojectbackend.kryponit.Kryptonit;
 import com.example.aw_finalprojectbackend.kryponit.KryptonitResponseDTO;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.cassandra.CassandraProperties;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -16,7 +17,7 @@ import java.util.List;
 import java.util.Optional;
 
 @RestController
-@CrossOrigin(origins = "http://localhost:3000", allowCredentials = "true")
+@CrossOrigin(origins = "http://localhost:3000", allowCredentials = "true", allowedHeaders = "*", methods = {RequestMethod.POST, RequestMethod.DELETE, RequestMethod.GET, RequestMethod.PUT})
 public class KryptonitEintragController {
 
     BenutzerRepository benutzerRepository;
@@ -26,7 +27,7 @@ public class KryptonitEintragController {
         this.benutzerRepository = benutzerRepository;
     }
 
-    @PostMapping("/kryptonit/{kryptonitId}/eintrag")
+    @PostMapping("/kryptonitEintrag/{kryptonitId}")
     public ResponseEntity<?> eintraglisteBearbeiten(@PathVariable Long kryptonitId, @RequestBody kryptonitEintragRequestDTO kryptonitEintragRequestDTO, @ModelAttribute("eingeloggterBenutzer") Optional<Benutzer> eingeloggterBenutzerOptional) {
 
         if (eingeloggterBenutzerOptional.isPresent()) {
@@ -52,7 +53,7 @@ public class KryptonitEintragController {
                             .setHaeufigkeit(kryptonitEintragRequestDTO.haeufigkeit());
 
                     benutzerRepository.save(eingeloggterBenutzer);
-                    return ResponseEntity.status(HttpStatus.TOO_EARLY).body(new KryptonitResponseDTO(veraendertesKryptonit, "Es gibt schon einen Tageseintrag. Aktueller Kryptonit-Tageseintrag wurde aktualisiert."));
+                    return ResponseEntity.status(HttpStatus.OK).body(new KryptonitResponseDTO(veraendertesKryptonit, "Es gibt schon einen Tageseintrag. Aktueller Kryptonit-Tageseintrag wurde aktualisiert."));
                 } else { //erstelle einen neuen Eintrag, falls es zum heutigen Tag noch keinen Eintrag gibt
                     veraendertesKryptonit
                             .getTaeglicheEintraege()
