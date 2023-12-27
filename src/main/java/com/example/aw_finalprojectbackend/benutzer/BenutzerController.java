@@ -16,6 +16,7 @@ import java.util.Collections;
 import java.util.Optional;
 
 @RestController
+@CrossOrigin(origins = "http://localhost:3000", allowCredentials = "true")
 public class BenutzerController {
     private final BenutzerRepository benutzerRepository;
     private final SitzungRepository sitzungRepository;
@@ -41,7 +42,7 @@ public class BenutzerController {
                 response.addCookie(cookie);
 
                 return ResponseEntity.status(HttpStatus.ACCEPTED).body(Collections.singleton("Erfolgreich eingeloggt."));
-            } else return ResponseEntity.status(HttpStatus.CONFLICT).body(Collections.singleton("Benutzer ist bereits eingeloggt!"));
+            } else return ResponseEntity.status(HttpStatus.CONFLICT).body(Collections.singleton("Ein Benutzer ist bereits eingeloggt!"));
         } else return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).body(Collections.singleton("Benutzer oder Passwort sind nicht korrekt!"));
     }
 

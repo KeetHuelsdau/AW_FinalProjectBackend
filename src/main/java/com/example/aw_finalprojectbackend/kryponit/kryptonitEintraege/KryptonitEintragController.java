@@ -3,6 +3,7 @@ package com.example.aw_finalprojectbackend.kryponit.kryptonitEintraege;
 import com.example.aw_finalprojectbackend.benutzer.Benutzer;
 import com.example.aw_finalprojectbackend.benutzer.BenutzerRepository;
 import com.example.aw_finalprojectbackend.kryponit.Kryptonit;
+import com.example.aw_finalprojectbackend.kryponit.KryptonitResponseDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -15,6 +16,7 @@ import java.util.List;
 import java.util.Optional;
 
 @RestController
+@CrossOrigin(origins = "http://localhost:3000", allowCredentials = "true")
 public class KryptonitEintragController {
 
     BenutzerRepository benutzerRepository;
@@ -41,21 +43,27 @@ public class KryptonitEintragController {
                 List<KryptonitEintrag> eintraege = veraendertesKryptonit.getTaeglicheEintraege();
 
                 //überprüfen, ob ein Eintrag zum heutigen Tag schon existiert, dann wird alter Häufigkeitswert ersetzt
-                if(eintraege.stream().anyMatch(eintrag -> eintrag.getZeitpunkt().getDayOfYear() == LocalDate.now().getDayOfYear())) {
-                    eintraege
-                            .stream()
+                if (eintraege.stream().anyMatch(eintrag -> eintrag.getZeitpunkt().getDayOfYear() == LocalDate.now().getDayOfYear())) {
+
+                    eintraege.stream()
                             .filter(eintrag -> eintrag.getZeitpunkt().getDayOfYear() == LocalDate.now().getDayOfYear())
                             .findFirst()
                             .get()
                             .setHaeufigkeit(kryptonitEintragRequestDTO.haeufigkeit());
-                } else { //erstelle einen neuen Eintrag, falls es zum heutigen Tag noch keinen Eintrag  gibt
+
+                    benutzerRepository.save(eingeloggterBenutzer);
+                    return ResponseEntity.status(HttpStatus.TOO_EARLY).body(new KryptonitResponseDTO(veraendertesKryptonit, "Es gibt schon einen Tageseintrag. Aktueller Kryptonit-Tageseintrag wurde aktualisiert."));
+                } else { //erstelle einen neuen Eintrag, falls es zum heutigen Tag noch keinen Eintrag gibt
                     veraendertesKryptonit
                             .getTaeglicheEintraege()
                             .add(new KryptonitEintrag(kryptonitEintragRequestDTO.haeufigkeit(), veraendertesKryptonit));
+                    benutzerRepository.save(eingeloggterBenutzer);
+                    return ResponseEntity.status(HttpStatus.OK).body(new KryptonitResponseDTO(veraendertesKryptonit, "Tageseintrag wurde erstellt"));
                 }
-                benutzerRepository.save(eingeloggterBenutzer);
-                return ResponseEntity.status(HttpStatus.OK).body(veraendertesKryptonit);
-            } else return ResponseEntity.status(HttpStatus.CONFLICT).body(Collections.singletonList("Benutzer hat dieses Kryptonit nicht."));
-        } else return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(Collections.singletonList("Login erforderlich"));
+
+            } else
+                return ResponseEntity.status(HttpStatus.CONFLICT).body(Collections.singletonList("Benutzer hat dieses Kryptonit nicht."));
+        } else
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(Collections.singletonList("Login erforderlich"));
     }
 }

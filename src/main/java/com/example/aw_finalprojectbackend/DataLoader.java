@@ -1,6 +1,5 @@
+/*
 package com.example.aw_finalprojectbackend;
-
-
 import com.example.aw_finalprojectbackend.benutzer.Benutzer;
 import com.example.aw_finalprojectbackend.benutzer.BenutzerRepository;
 import com.example.aw_finalprojectbackend.kryponit.Kryptonit;
@@ -35,10 +34,7 @@ public class DataLoader implements ApplicationRunner {
         moritzrose.getKryptonite().add(kaffee);
         moritzrose.getKryptonite().add(new Kryptonit("Zocken", moritzrose));
 
-        moritzrose.getKryptonite().get(0).getTaeglicheEintraege().add(new KryptonitEintrag(3,schokolade));
-        moritzrose.getKryptonite().get(1).getTaeglicheEintraege().add(new KryptonitEintrag(5,kaffee));
 
-        moritzrose.getStimmungen().add( new Stimmung(moritzrose, 5, "Glücklich!"));
         moritzrose.getStimmungen().add(new Stimmung(moritzrose, 3, "Traurig!"));
 
         benutzerRepository.save(moritzrose);
@@ -64,6 +60,8 @@ public class DataLoader implements ApplicationRunner {
 
         keethuelsdau.getStimmungen().add(new Stimmung(keethuelsdau, 4,"Solala!"));
         benutzerRepository.save(keethuelsdau);
+
     }
 }
+    */
 

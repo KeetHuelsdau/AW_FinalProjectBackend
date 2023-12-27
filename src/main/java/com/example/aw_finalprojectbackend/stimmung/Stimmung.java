@@ -65,7 +65,11 @@ public class Stimmung {
         this.rating = rating;
     }
 
-    public String getErstellungszeit() {
+    public LocalDateTime getErstellungszeit() {
+        return erstellungszeit;
+    }
+
+    public String getErstellungszeitalsString() {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyy HH:mm");
         return erstellungszeit.format(formatter);
     }
