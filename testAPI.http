@@ -57,11 +57,13 @@ POST http://localhost:8080/stimmung
 Content-Type:application/json
 
 {
-  "rating":6,
-  "kommentar":"Was für ein toller Tag"
+  "rating":2,
+  "kommentar":"Viel zu viel gegessen, bin müde..."
 }
 
-
+###
+DELETE http://localhost:8080/stimmung/3
+Content-Type:application/json
 ###
 
 
@@ -110,7 +112,7 @@ POST http://localhost:8080//kryptonit/1/eintrag
 Content-Type:application/json
 
 {
-  "haeufigkeit": 4
+  "haeufigkeit": 5
 }
 
 
