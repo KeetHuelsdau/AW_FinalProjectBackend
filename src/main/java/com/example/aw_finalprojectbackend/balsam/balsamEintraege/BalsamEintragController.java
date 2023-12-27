@@ -14,7 +14,7 @@ import java.util.List;
 import java.util.Optional;
 
 @RestController
-
+@CrossOrigin(origins = "http://localhost:3000", allowCredentials = "true", allowedHeaders = "*", methods = {RequestMethod.POST, RequestMethod.DELETE, RequestMethod.GET, RequestMethod.PUT})
 public class BalsamEintragController {
 
     BenutzerRepository benutzerRepository;
@@ -24,7 +24,7 @@ public class BalsamEintragController {
         this.benutzerRepository = benutzerRepository;
     }
 
-    @PostMapping("/balsam/{balsamId}/eintrag")
+    @PostMapping("/balsamEintrag/{balsamId}")
     public ResponseEntity<?> eintraglisteBearbeiten(@PathVariable Long balsamId, @ModelAttribute("eingeloggterBenutzer") Optional<Benutzer> eingeloggterBenutzerOptional) {
 
         if (eingeloggterBenutzerOptional.isPresent()) {
