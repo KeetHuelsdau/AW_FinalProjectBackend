@@ -2,7 +2,6 @@ package com.example.aw_finalprojectbackend.balsam;
 
 import com.example.aw_finalprojectbackend.balsam.balsamEintraege.BalsamEintrag;
 import com.example.aw_finalprojectbackend.benutzer.Benutzer;
-import com.example.aw_finalprojectbackend.kryponit.kryptonitEintraege.KryptonitEintrag;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
@@ -25,6 +24,9 @@ public class Balsam {
     @OneToMany(mappedBy = "balsam", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<BalsamEintrag> taeglicheEintraege;
 
+    @Transient //diese Annotation verhindert, dass die Eigenschaft in der Datenbank gespeichert wird
+    private String farbe;
+
     public Balsam() {
     }
 
@@ -44,5 +46,13 @@ public class Balsam {
 
     public List<BalsamEintrag> getTaeglicheEintraege() {
         return taeglicheEintraege;
+    }
+
+    public String getFarbe() {
+        return farbe;
+    }
+
+    public void setFarbe(String farbe) {
+        this.farbe = farbe;
     }
 }

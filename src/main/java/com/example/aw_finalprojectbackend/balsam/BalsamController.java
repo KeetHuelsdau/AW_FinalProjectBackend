@@ -1,9 +1,8 @@
 package com.example.aw_finalprojectbackend.balsam;
 
+import com.example.aw_finalprojectbackend.balsam.balsamEintraege.BalsamEintrag;
 import com.example.aw_finalprojectbackend.benutzer.Benutzer;
 import com.example.aw_finalprojectbackend.benutzer.BenutzerRepository;
-import com.example.aw_finalprojectbackend.kryponit.Kryptonit;
-import com.example.aw_finalprojectbackend.kryponit.KryptonitRequestDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -32,8 +31,11 @@ public class BalsamController {
             if (balsameDesBenutzers.stream().anyMatch(k -> k.getBezeichnung().equalsIgnoreCase(balsamRequestDTO.bezeichnung()))) {
                 return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(Collections.singletonList("Balsam existiert bereits in der Liste"));
             }
+            //Erstelle neuen Balsam
             Balsam neuerBalsam = new Balsam(balsamRequestDTO.bezeichnung(), eingeloggterBenutzer);
-            eingeloggterBenutzer.getBalsame().add(neuerBalsam);
+
+            //Füge den Balsam ohne Aktivitätsflag hinzu
+            balsameDesBenutzers.add(neuerBalsam);
             benutzerRepository.save(eingeloggterBenutzer);
             return ResponseEntity.status(HttpStatus.CREATED).body(neuerBalsam);
         } else
@@ -44,14 +46,23 @@ public class BalsamController {
     public ResponseEntity<List<?>> erhalteAlleBalsame(@ModelAttribute("eingeloggterBenutzer") Optional<Benutzer> eingeloggterBenutzerOptional) {
         if (eingeloggterBenutzerOptional.isPresent()) {
             Benutzer eingeloggterBenutzer = eingeloggterBenutzerOptional.get();
-            return ResponseEntity.ok(eingeloggterBenutzer.getBalsame());
+
+            List<Balsam> balsame = eingeloggterBenutzer.getBalsame();
+            //Gehe durch die Liste und setze eine Eigenschaft für die Farbe basierend auf den aktiv Status
+            balsame.forEach(balsam -> {
+                boolean aktiv =  balsam.getTaeglicheEintraege()
+                                .stream()
+                                .anyMatch(BalsamEintrag::getAktiv);
+                balsam.setFarbe(aktiv ? "green" : "red");
+            });
+            return ResponseEntity.ok(balsame);
         } else {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(Collections.singletonList("Login erforderlich"));
         }
     }
 
     @DeleteMapping("/balsam/{balsamId}")
-    public ResponseEntity<?> loescheKryptonit(@PathVariable Long balsamId, @ModelAttribute("eingeloggterBenutzer") Optional<Benutzer> eingeloggterBenutzerOptional) {
+    public ResponseEntity<?> loescheBalsam(@PathVariable Long balsamId, @ModelAttribute("eingeloggterBenutzer") Optional<Benutzer> eingeloggterBenutzerOptional) {
         if (eingeloggterBenutzerOptional.isPresent()) {
             Benutzer eingeloggterBenutzer = eingeloggterBenutzerOptional.get();
 
