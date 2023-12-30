@@ -17,6 +17,9 @@ public class Stimmung {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long stimmungId;
 
+
+    @Min(0)
+    @Max(6)
     private int rating;
 
     private LocalDateTime erstellungszeit;
@@ -30,7 +33,7 @@ public class Stimmung {
 
     public Stimmung(Benutzer benutzer, int rating, String kommentar) {
         this.benutzer = benutzer;
-        this.rating = rating;
+        this.setRating(rating);
         this.erstellungszeit = LocalDateTime.now();
         this.kommentar = kommentar;
     }
@@ -59,8 +62,8 @@ public class Stimmung {
     }
 
     public void setRating(int rating) {
-        if (rating < 1 || rating > 6) {
-            throw new IllegalArgumentException("Rating muss im Bereich von 1 bis 6 liegen");
+        if (rating < StimmungRating.NULL.getWert() || rating > StimmungRating.SECHS.getWert()) {
+            throw new IllegalArgumentException("Ungültiges Rating: " + rating);
         }
         this.rating = rating;
     }
