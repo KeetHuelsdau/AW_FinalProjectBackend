@@ -67,6 +67,7 @@ Content-Type:application/json
 ###
 
 
+
 //-------------------------------------------------KryptonitEndpunkte---------------------------------------------------
 ### Alle Kryptonite holen
 GET http://localhost:8080/kryptonite
@@ -74,7 +75,7 @@ Content-Type:application/json
 
 
 ### Erstelle Kryptonit
-POST http://localhost:8080/kryptonit
+POST http://localhost:8080//kryptonit
 Content-Type:application/json
 
 {
@@ -83,7 +84,7 @@ Content-Type:application/json
 
 
 ### Lösche Kryptonit vom Benutzer moritzrose
-DELETE http://localhost:8080/kryptonit/152
+DELETE http://localhost:8080/kryptonit/1
 Content-Type:application/json
 
 
@@ -154,5 +155,5 @@ DELETE http://localhost:8080/balsam/1
 Content-Type:application/json
 
 ### Erstelle Balsameintrag
-POST http://localhost:8080/balsamEintrag/2
+POST http://localhost:8080/balsamEintrag/1
 Content-Type:application/json
