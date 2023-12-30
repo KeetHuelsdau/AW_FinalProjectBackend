@@ -59,16 +59,16 @@ public class StimmungController {
                 Stimmung stimmungInnerhalbDerLetztenZweiStunden = stimmungInnerhalbDerLetztenZweiStundenOptional.get();
                 stimmungInnerhalbDerLetztenZweiStunden.setRating(stimmungDTO.rating());
                 benutzerRepository.save(eingeloggterBenutzer);
-                //stimmungInnerhalbDerLetztenZweiStunden.setKommentar("");
+                String ablaufZeit = stimmungInnerhalbDerLetztenZweiStunden.getErstellungszeit().plusHours(2).format(DateTimeFormatter.ofPattern("HH:mm"));
                 return ResponseEntity.status(HttpStatus.OK)
-                        .body(new StimmungResponseDTO(stimmungInnerhalbDerLetztenZweiStunden,
-                                "Die aktuelle Stimmung wurde geändert. Du kannst um " +
-                                        stimmungInnerhalbDerLetztenZweiStunden.getErstellungszeit().plusHours(2).format(DateTimeFormatter.ofPattern("HH:mm")) +
-                                " eine neue Stimmung hinzufügen!"));
+                        .body(new StimmungResponseDTO(stimmungInnerhalbDerLetztenZweiStunden, ablaufZeit,
+                                "Die aktuelle Stimmung wurde geändert. Du kannst erst um " +
+                                        ablaufZeit +
+                                " wieder eine neue Stimmung hinzufügen!"));
             } else {
                 Stimmung neueStimmung = stimmungService.erstelleStimmung(eingeloggterBenutzer, stimmungDTO);
                 return ResponseEntity.status(HttpStatus.CREATED)
-                        .body(new StimmungResponseDTO(neueStimmung, "Stimmung erfolgreich erstellt"));
+                        .body(new StimmungResponseDTO(neueStimmung, "","Stimmung erfolgreich erstellt"));
             }
 
         } else {

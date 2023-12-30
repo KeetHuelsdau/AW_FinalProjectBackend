@@ -1,5 +1,7 @@
 package com.example.aw_finalprojectbackend.benutzer;
 
+import com.example.aw_finalprojectbackend.kryponit.Kryptonit;
+import com.example.aw_finalprojectbackend.kryponit.kryptonitEintraege.kryptonitEintragRequestDTO;
 import com.example.aw_finalprojectbackend.sitzung.*;
 
 import jakarta.servlet.http.Cookie;
@@ -27,6 +29,16 @@ public class BenutzerController {
         this.sitzungRepository = sitzungRepository;
     }
 
+    @GetMapping("/benutzer")
+    public ResponseEntity<?> aktuellerBenutzer(@ModelAttribute("eingeloggterBenutzer") Optional<Benutzer> eingeloggterBenutzerOptional) {
+
+        if (eingeloggterBenutzerOptional.isPresent()) {
+            return ResponseEntity.status(HttpStatus.OK).body(eingeloggterBenutzerOptional.get());
+        } else
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(Collections.singleton("Kein Benutzer eingeloggt!"));
+    }
+
+
     @PostMapping("/einloggen")
     public ResponseEntity<?> login(@CookieValue(value = "sitzungsId", defaultValue = "") String sitzungsId, @RequestBody LoginRequestDTO login, HttpServletResponse response) {
         Optional<Benutzer> benutzerOptional = benutzerRepository.findByBenutzerNameAndPasswort(login.benutzerName(), login.passwort());
@@ -42,8 +54,10 @@ public class BenutzerController {
                 response.addCookie(cookie);
 
                 return ResponseEntity.status(HttpStatus.ACCEPTED).body(Collections.singleton("Erfolgreich eingeloggt."));
-            } else return ResponseEntity.status(HttpStatus.CONFLICT).body(Collections.singleton("Ein Benutzer ist bereits eingeloggt!"));
-        } else return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).body(Collections.singleton("Benutzer oder Passwort sind nicht korrekt!"));
+            } else
+                return ResponseEntity.status(HttpStatus.CONFLICT).body(Collections.singleton("Ein Benutzer ist bereits eingeloggt!"));
+        } else
+            return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).body(Collections.singleton("Benutzer oder Passwort sind nicht korrekt!"));
     }
 
     @PostMapping("/ausloggen")
@@ -57,7 +71,8 @@ public class BenutzerController {
             response.addCookie(cookie);
 
             return ResponseEntity.status(HttpStatus.ACCEPTED).body(Collections.singleton("Erfolgreich ausgeloggt."));
-        } else return ResponseEntity.status(HttpStatus.CONFLICT).body(Collections.singleton("Kein Benutzer eingeloggt!"));
+        } else
+            return ResponseEntity.status(HttpStatus.CONFLICT).body(Collections.singleton("Kein Benutzer eingeloggt!"));
     }
 
     @PostMapping("/registrieren")
@@ -71,7 +86,19 @@ public class BenutzerController {
                 Benutzer erstelleBenutzer = new Benutzer(registerRequestDTO.benutzerName(), registerRequestDTO.passwort1(), registerRequestDTO.vorname(), registerRequestDTO.nachname(), registerRequestDTO.geschlecht());
                 benutzerRepository.save(erstelleBenutzer);
                 return ResponseEntity.status(HttpStatus.ACCEPTED).body(Collections.singleton(registerRequestDTO.benutzerName()));
-            } else return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).body(Collections.singleton("Passwörter stimmen nicht überein."));
+            } else
+                return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).body(Collections.singleton("Passwörter stimmen nicht überein."));
         }
+    }
+
+    @PutMapping("/avatar")
+    public ResponseEntity<?> wechsleAvatar(@ModelAttribute("eingeloggterBenutzer") Optional<Benutzer> eingeloggterBenutzerOptional, @RequestBody AvatarRequestDTO  avatarRequestDTO) {
+        if (eingeloggterBenutzerOptional.isPresent()) {
+            Benutzer eingeloggterBenutzer = eingeloggterBenutzerOptional.get();
+            eingeloggterBenutzer.setAnimalWord(avatarRequestDTO.avatarBezeichnung());
+            benutzerRepository.save(eingeloggterBenutzer);
+            return ResponseEntity.status(HttpStatus.OK).body(Collections.singleton("Avatar wurde erfolgreich aktualisiert"));
+        } else
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(Collections.singleton("Kein Benutzer eingeloggt!"));
     }
 }

@@ -23,6 +23,7 @@ public class Stimmung {
     private int rating;
 
     private LocalDateTime erstellungszeit;
+    private LocalDateTime ablaufZeit;
 
     @Size(min = 0, max = 255)
     private String kommentar;
@@ -36,6 +37,7 @@ public class Stimmung {
         this.setRating(rating);
         this.erstellungszeit = LocalDateTime.now();
         this.kommentar = kommentar;
+        this.ablaufZeit = this.erstellungszeit.plusHours(2);
     }
 
     public Stimmung() {
@@ -76,6 +78,12 @@ public class Stimmung {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyy HH:mm");
         return erstellungszeit.format(formatter);
     }
+
+    public String ablaufZeitalsString() {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm");
+        return ablaufZeit.format(formatter);
+    }
+
 
     public void setErstellungszeit(LocalDateTime erstellungszeit) {
         this.erstellungszeit = erstellungszeit;

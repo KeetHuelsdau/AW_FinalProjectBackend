@@ -89,4 +89,11 @@ public class Benutzer {
         return balsame;
     }
 
+    public String getAnimalWord() {
+        return animalWord;
+    }
+
+    public void setAnimalWord(String animalWord) {
+        this.animalWord = animalWord;
+    }
 }
