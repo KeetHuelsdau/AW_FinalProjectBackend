@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 @Entity
 public class KryptonitEintrag {
@@ -31,6 +32,11 @@ public class KryptonitEintrag {
 
     public LocalDateTime getZeitpunkt() {
         return zeitpunkt;
+    }
+
+    public String getErstellungszeitalsString() {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyy");
+        return zeitpunkt.format(formatter);
     }
 
     public int getHaeufigkeit() {

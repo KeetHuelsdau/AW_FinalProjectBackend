@@ -22,6 +22,8 @@ public class Benutzer {
     @JsonIgnore
     private String passwort;
 
+    private String animalWord;
+
     String vorname;
     String nachname;
     String geschlecht;
@@ -42,6 +44,7 @@ public class Benutzer {
         this.vorname = vorname;
         this.nachname = nachname;
         this.geschlecht = geschlecht;
+        this.animalWord = ""; //wenn leerer String => Standardprofilbild (leerer GrauWeißKopf)
         this.stimmungen = new ArrayList<>();
         this.kryptonite = new ArrayList<>();
     }

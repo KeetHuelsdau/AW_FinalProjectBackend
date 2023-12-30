@@ -70,7 +70,7 @@ public class Stimmung {
     }
 
     public String getErstellungszeitalsString() {
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyy HH:mm");
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyy HH:mm");
         return erstellungszeit.format(formatter);
     }
 

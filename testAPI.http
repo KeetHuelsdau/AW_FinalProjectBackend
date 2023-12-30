@@ -57,8 +57,8 @@ POST http://localhost:8080/stimmung
 Content-Type:application/json
 
 {
-  "rating":4,
-  "kommentar":"Endlich dieses blöde Problem mit 'Too_Early' gelöst!!!"
+  "rating":6,
+  "kommentar":"EEEEEndlich konnten wir das Gridproblem lösen! "
 }
 
 ###
@@ -83,7 +83,7 @@ Content-Type:application/json
 
 
 ### Lösche Kryptonit vom Benutzer moritzrose
-DELETE http://localhost:8080/kryptonit/1
+DELETE http://localhost:8080/kryptonit/152
 Content-Type:application/json
 
 
@@ -108,7 +108,7 @@ Content-Type:application/json
 
 ### Füge neuen Kryptoniteintrag hinzu
 
-POST http://localhost:8080/kryptonitEintrag/1
+POST http://localhost:8080/kryptonitEintrag/202
 Content-Type:application/json
 
 {
@@ -154,5 +154,5 @@ DELETE http://localhost:8080/balsam/1
 Content-Type:application/json
 
 ### Erstelle Balsameintrag
-POST http://localhost:8080/balsamEintrag/1
+POST http://localhost:8080/balsamEintrag/2
 Content-Type:application/json

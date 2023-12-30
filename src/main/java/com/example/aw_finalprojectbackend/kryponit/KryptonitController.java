@@ -54,7 +54,7 @@ public class KryptonitController {
 
             benutzerRepository.save(eingeloggterBenutzer); //Den Benutzer speichern, um das neue Kryptonit zur DB hinzuzuspeichern
 
-            return ResponseEntity.status(HttpStatus.CREATED).body(neuesKryptonit);
+            return ResponseEntity.status(HttpStatus.OK).body(neuesKryptonit);
         } else {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(Collections.singletonList("Login erforderlich"));
         }

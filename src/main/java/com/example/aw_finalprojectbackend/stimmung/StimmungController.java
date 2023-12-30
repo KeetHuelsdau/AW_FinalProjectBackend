@@ -2,6 +2,7 @@ package com.example.aw_finalprojectbackend.stimmung;
 
 import com.example.aw_finalprojectbackend.ListenSammlung;
 import com.example.aw_finalprojectbackend.benutzer.Benutzer;
+import com.example.aw_finalprojectbackend.benutzer.BenutzerRepository;
 import com.example.aw_finalprojectbackend.kryponit.Kryptonit;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -19,10 +20,13 @@ import java.util.Optional;
 public class StimmungController {
 
     private final StimmungService stimmungService;
+    private final BenutzerRepository benutzerRepository;
 
     @Autowired
-    public StimmungController(StimmungService stimmungService) {
+
+    public StimmungController(StimmungService stimmungService, BenutzerRepository benutzerRepository) {
         this.stimmungService = stimmungService;
+        this.benutzerRepository = benutzerRepository;
     }
 
     @GetMapping("/stimmungen")
@@ -54,8 +58,9 @@ public class StimmungController {
             if (stimmungInnerhalbDerLetztenZweiStundenOptional.isPresent()) {
                 Stimmung stimmungInnerhalbDerLetztenZweiStunden = stimmungInnerhalbDerLetztenZweiStundenOptional.get();
                 stimmungInnerhalbDerLetztenZweiStunden.setRating(stimmungDTO.rating());
+                benutzerRepository.save(eingeloggterBenutzer);
                 //stimmungInnerhalbDerLetztenZweiStunden.setKommentar("");
-                return ResponseEntity.status(HttpStatus.TOO_EARLY)
+                return ResponseEntity.status(HttpStatus.OK)
                         .body(new StimmungResponseDTO(stimmungInnerhalbDerLetztenZweiStunden,
                                 "Die aktuelle Stimmung wurde geändert. Du kannst um " +
                                         stimmungInnerhalbDerLetztenZweiStunden.getErstellungszeit().plusHours(2).format(DateTimeFormatter.ofPattern("HH:mm")) +
