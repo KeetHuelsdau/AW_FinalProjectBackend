@@ -1,5 +1,5 @@
-/*
 package com.example.aw_finalprojectbackend;
+import com.example.aw_finalprojectbackend.balsam.Balsam;
 import com.example.aw_finalprojectbackend.benutzer.Benutzer;
 import com.example.aw_finalprojectbackend.benutzer.BenutzerRepository;
 import com.example.aw_finalprojectbackend.kryponit.Kryptonit;
@@ -27,13 +27,9 @@ public class DataLoader implements ApplicationRunner {
 
         Benutzer moritzrose = new Benutzer("moritzrose", "moritzrose", "Moritz", "Rose", "männlich");
 
-        Kryptonit schokolade = new Kryptonit("Schokolade", moritzrose);
-        Kryptonit kaffee = new Kryptonit("Kaffee", moritzrose);
-
-        moritzrose.getKryptonite().add(schokolade);
-        moritzrose.getKryptonite().add(kaffee);
+        moritzrose.getKryptonite().add(new Kryptonit("Schokolade", moritzrose));
+        moritzrose.getKryptonite().add(new Kryptonit("Kaffee", moritzrose));
         moritzrose.getKryptonite().add(new Kryptonit("Zocken", moritzrose));
-
 
         moritzrose.getStimmungen().add(new Stimmung(moritzrose, 3, "Traurig!"));
 
@@ -51,17 +47,15 @@ public class DataLoader implements ApplicationRunner {
 
 
         Benutzer keethuelsdau = new Benutzer("keethuelsdau", "keethuelsdau", "Keet", "Huelsdau", "weiblich");
-        Kryptonit kekse = new Kryptonit("Kekse", keethuelsdau);
-        Kryptonit haribo = new Kryptonit("Haribo", keethuelsdau);
-        Kryptonit prokrastination = new Kryptonit("Prokrastination", keethuelsdau);
-        keethuelsdau.getKryptonite().add(kekse);
-        keethuelsdau.getKryptonite().add(haribo);
-        keethuelsdau.getKryptonite().add(prokrastination);
+
+        keethuelsdau.getKryptonite().add(new Kryptonit("Kekse", keethuelsdau));
+        keethuelsdau.getKryptonite().add(new Kryptonit("Haribo", keethuelsdau));
+        keethuelsdau.getKryptonite().add(new Kryptonit("Prokrastination", keethuelsdau));
 
         keethuelsdau.getStimmungen().add(new Stimmung(keethuelsdau, 4,"Solala!"));
+
         benutzerRepository.save(keethuelsdau);
 
     }
 }
-    */
 
