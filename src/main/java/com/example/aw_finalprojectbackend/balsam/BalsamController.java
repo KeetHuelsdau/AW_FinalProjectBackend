@@ -8,6 +8,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.Duration;
+import java.time.LocalDateTime;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
@@ -48,12 +50,31 @@ public class BalsamController {
             Benutzer eingeloggterBenutzer = eingeloggterBenutzerOptional.get();
 
             List<Balsam> balsame = eingeloggterBenutzer.getBalsame();
-            //Gehe durch die Liste und setze eine Eigenschaft für die Farbe basierend auf den aktiv Status
+
+            LocalDateTime jetzigerZeitpunkt = LocalDateTime.now();
+
+            //Überprüfe den Zeitunterschied und setze die Farben des Aktivitätszustandes neu oder behalte sie bei
             balsame.forEach(balsam -> {
-                boolean aktiv =  balsam.getTaeglicheEintraege()
-                                .stream()
-                                .anyMatch(BalsamEintrag::getAktiv);
-                balsam.setFarbe(aktiv ? "green" : "red");
+                List<BalsamEintrag> taeglicheEintraege = balsam.getTaeglicheEintraege();
+
+                if(!taeglicheEintraege.isEmpty()){
+                    BalsamEintrag letzterEintrag = taeglicheEintraege.get(taeglicheEintraege.size()-1);
+                    LocalDateTime letzterEintragZeit= letzterEintrag.getZeitpunkt();
+
+                    long differenzTag = Duration.between(letzterEintragZeit, jetzigerZeitpunkt).toDays();
+
+                    if(differenzTag >= 1){
+                        //Setze die Farben auf Grau zurück, wenn mehr als ein Tag Unterschied besteht
+                        balsam.setFarbe("gray");
+                    }else{
+                        //Überprüfe den Aktivitätsstatus des letzten Eintrags und setze die Farben entsprechend
+                        boolean aktiv = letzterEintrag.getAktiv();
+                        balsam.setFarbe(aktiv ? "green" : "red");
+                    }
+                }else{
+                    //Setze die Farbe auf Grau, wenn keine täglichen Einträge vorhanden sind
+                    balsam.setFarbe("gray");
+                }
             });
             return ResponseEntity.ok(balsame);
         } else {
