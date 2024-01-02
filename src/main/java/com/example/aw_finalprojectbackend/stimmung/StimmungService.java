@@ -18,29 +18,23 @@ public class StimmungService {
 
 
     public Stimmung erstelleStimmung(Benutzer benutzer, StimmungRequestDTO stimmungRequestDTO) {
-        Stimmung neueStimmung = new Stimmung(benutzer, stimmungRequestDTO.rating(), stimmungRequestDTO.kommentar().orElse(null));
+        Stimmung neueStimmung = new Stimmung(benutzer, stimmungRequestDTO.rating(), stimmungRequestDTO.kommentar().orElse(""));
         benutzer.getStimmungen().add(neueStimmung);
         benutzerRepository.save(benutzer);
         return neueStimmung;
     }
 
-    public Stimmung editiereStimmung(Benutzer benutzer, Long stimmungId, StimmungRequestDTO stimmungRequestDTO) {
+    public Stimmung editiereStimmung(Benutzer benutzer, Long stimmungId, StimmungskommentarRequestDTO stimmungskommentarRequestDTO) {
         Optional<Stimmung> bearbeiteteStimmungOptional = benutzer.getStimmungen().stream()
                 .filter(stimmung -> stimmung.getStimmungId().equals(stimmungId))
                 .findFirst();
 
         if (bearbeiteteStimmungOptional.isPresent()) {
             Stimmung bearbeiteteStimmung = bearbeiteteStimmungOptional.get();
-            bearbeiteteStimmung.setRating(stimmungRequestDTO.rating());
-            bearbeiteteStimmung.setKommentar(stimmungRequestDTO.kommentar().orElse(null));
+            bearbeiteteStimmung.setKommentar(stimmungskommentarRequestDTO.kommentar());
             benutzerRepository.save(benutzer);
             return bearbeiteteStimmung;
-        }
-
-        Stimmung neueStimmung = new Stimmung(benutzer, stimmungRequestDTO.rating(), stimmungRequestDTO.kommentar().orElse(null));
-        benutzer.getStimmungen().add(neueStimmung);
-        benutzerRepository.save(benutzer);
-        return neueStimmung;
+        } else return null;
     }
 
     public boolean loescheStimmung(Long stimmungId, Benutzer benutzer) {

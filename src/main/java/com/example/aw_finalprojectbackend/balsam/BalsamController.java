@@ -69,7 +69,7 @@ public class BalsamController {
                     }else{
                         //Überprüfe den Aktivitätsstatus des letzten Eintrags und setze die Farben entsprechend
                         boolean aktiv = letzterEintrag.getAktiv();
-                        balsam.setFarbe(aktiv ? "green" : "red");
+                        balsam.setFarbe(aktiv ? "#9fe265" : "#cf5f4f");
                     }
                 }else{
                     //Setze die Farbe auf Grau, wenn keine täglichen Einträge vorhanden sind

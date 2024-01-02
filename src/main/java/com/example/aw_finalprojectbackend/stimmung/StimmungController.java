@@ -77,11 +77,11 @@ public class StimmungController {
     }
 
     @PutMapping("/stimmung/{stimmungId}")
-    public ResponseEntity<List<?>> editiereStimmung(@PathVariable Long stimmungId, @RequestBody StimmungRequestDTO stimmungRequestDTO,
+    public ResponseEntity<List<?>> editiereKommentar(@PathVariable Long stimmungId, @RequestBody StimmungskommentarRequestDTO stimmungskommentarRequestDTO,
                                                     @ModelAttribute("eingeloggterBenutzer") Optional<Benutzer> eingeloggterBenutzerOptional) {
         if (eingeloggterBenutzerOptional.isPresent()) {
             Benutzer eingeloggterBenutzer = eingeloggterBenutzerOptional.get();
-            Stimmung bearbeiteteStimmung = stimmungService.editiereStimmung(eingeloggterBenutzer, stimmungId, stimmungRequestDTO);
+            Stimmung bearbeiteteStimmung = stimmungService.editiereStimmung(eingeloggterBenutzer, stimmungId, stimmungskommentarRequestDTO);
 
             if (bearbeiteteStimmung != null) {
                 return ResponseEntity.status(HttpStatus.ACCEPTED).body(Collections.singletonList("Stimmung geändert"));
