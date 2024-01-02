@@ -29,6 +29,19 @@ Content-Type:application/json
   "passwort": "keethuelsdau"
 }
 
+###Erhalte aktuellen Benutzer
+GET http://localhost:8080/benutzer
+Content-Type:application/json
+
+###Verändere Avatar des aktuellen Benutzers
+PUT http://localhost:8080/avatar
+Content-Type:application/json
+
+{
+  "avatarBezeichnung": "tiger"
+
+}
+
 
 ###Logout user
 POST http://localhost:8080/ausloggen

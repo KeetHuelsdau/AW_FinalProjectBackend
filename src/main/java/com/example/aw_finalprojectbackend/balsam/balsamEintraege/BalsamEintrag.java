@@ -6,6 +6,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 @Entity
 public class BalsamEintrag {
@@ -44,5 +45,10 @@ public class BalsamEintrag {
 
     public LocalDateTime getZeitpunkt() {
         return zeitpunkt;
+    }
+
+    public String getErstellungszeitalsString() {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyy");
+        return zeitpunkt.format(formatter);
     }
 }

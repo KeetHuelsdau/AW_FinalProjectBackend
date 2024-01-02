@@ -97,7 +97,7 @@ public class BenutzerController {
             Benutzer eingeloggterBenutzer = eingeloggterBenutzerOptional.get();
             eingeloggterBenutzer.setAnimalWord(avatarRequestDTO.avatarBezeichnung());
             benutzerRepository.save(eingeloggterBenutzer);
-            return ResponseEntity.status(HttpStatus.OK).body(Collections.singleton("Avatar wurde erfolgreich aktualisiert"));
+            return ResponseEntity.status(HttpStatus.OK).body(new AvatarResponseDTO(eingeloggterBenutzer.getAnimalWord(),"Avatar wurde erfolgreich aktualisiert"));
         } else
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(Collections.singleton("Kein Benutzer eingeloggt!"));
     }
