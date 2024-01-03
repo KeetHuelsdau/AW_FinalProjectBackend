@@ -48,7 +48,7 @@ public class BalsamEintrag {
     }
 
     public String getErstellungszeitalsString() {
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyy");
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy");
         return zeitpunkt.format(formatter);
     }
 }
