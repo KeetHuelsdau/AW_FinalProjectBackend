@@ -31,7 +31,7 @@ public class BalsamController {
             Benutzer eingeloggterBenutzer = eingeloggterBenutzerOptional.get();
             List<Balsam> balsameDesBenutzers = eingeloggterBenutzer.getBalsame();
             if (balsameDesBenutzers.stream().anyMatch(k -> k.getBezeichnung().equalsIgnoreCase(balsamRequestDTO.bezeichnung()))) {
-                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(Collections.singletonList("Balsam existiert bereits in der Liste"));
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(Collections.singletonList("Gute Angewohnheit existiert bereits in der Liste"));
             }
             //Erstelle neuen Balsam
             Balsam neuerBalsam = new Balsam(balsamRequestDTO.bezeichnung(), eingeloggterBenutzer);

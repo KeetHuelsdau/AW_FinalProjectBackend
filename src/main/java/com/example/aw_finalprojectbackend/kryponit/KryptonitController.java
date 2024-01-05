@@ -47,7 +47,7 @@ public class KryptonitController {
 
             List<Kryptonit> kryptoniteDesBenutzers = eingeloggterBenutzer.getKryptonite();
             if (kryptoniteDesBenutzers.stream().anyMatch(k -> k.getBezeichnung().equalsIgnoreCase(neuesKryptonit.getBezeichnung()))) {
-                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(Collections.singletonList("Kryptonit existiert bereits in der Liste"));
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(Collections.singletonList("Schlechte Angewohnheit existiert bereits in der Liste"));
             }
 
             kryptoniteDesBenutzers.add(neuesKryptonit); //Dem Benutzer das neue Kryponit hinzufuegen
